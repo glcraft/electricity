@@ -20,3 +20,36 @@ body
     border-width: 1px;
 
 }
+.explorer-list
+{
+    display: list-item;
+}
+.explorer-list-item
+{
+    display: flex;
+    
+    border: 1px solid rgba(255, 255, 255, 0); 
+}
+.explorer-list-item > img
+{
+    width: 2em;
+}
+.explorer-list-item > div
+{
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.explorer-list-item[data-type="dir"]
+{
+    order: 1;
+}
+.explorer-list-item[data-type="file"]
+{
+    order: 2;
+}
+.explorer-list-item:hover
+{
+    background-color: rgb(200, 212, 228);
+    border: 1px solid rgb(146, 176, 218); 
+}
