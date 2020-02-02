@@ -1,0 +1,20 @@
+{
+  "name": "extract-icon",
+  "version": "0.0.0",
+  "description": "Extract Windows icons",
+  "main": "hello.js",
+  "private": true,
+  "dependencies": {
+    "bindings": "~1.2.1",
+    "nan": "^2.0.0"
+  },
+  "scripts": {
+    "test": "node .",
+    "build": "node-gyp build",
+    "postinstall": "node-gyp configure"
+  },
+  "gypfile": true,
+  "devDependencies": {
+    "electron-rebuild": "^1.10.0"
+  }
+}
