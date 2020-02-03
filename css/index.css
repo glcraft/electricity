@@ -58,3 +58,17 @@ body
     background-color: rgb(200, 212, 228);
     border: 1px solid rgb(146, 176, 218); 
 }
+
+.bc-item
+{
+    display: inline;
+}
+.breadcrumb
+{
+    list-style: none;
+}
+.breadcrumb .bc-item+.bc-item:before {
+    padding: 8px;
+    color: black;
+    content: "·";
+}
