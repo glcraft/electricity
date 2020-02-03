@@ -8,7 +8,9 @@
     "start": "electron .",
     "watch-app": "tsc -w -p app",
     "watch-renderer": "tsc -w -p renderer",
-    "watch": "npm-run-all --parallel watch-app watch-renderer"
+    "watch": "npm-run-all --parallel watch-app watch-renderer",
+    "rebuild": "electron-rebuild -f -w extract-icon",
+    "postinstall": "electron-rebuild -f -w extract-icon"
   },
   "keywords": [
     "explorer"
