@@ -1,15 +1,14 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import * as uuid from 'uuid/v4'
-import * as iconExtractor  from 'icon-extractor'
-import * as bindings from '../extract-icon/node_modules/bindings'
+import {extractIcon} from 'extract-icon'
 import {RendererPath} from './RendererPath'
 
 let expl = document.getElementsByClassName("explorer")
-let geticon=bindings("extract-icon")
+let geticon=extractIcon
 const rendererPath = new RendererPath(__dirname)
 
-const currentPath = "D:/Projects/electricity/extract-icon"
+const currentPath = `${__dirname}/..`
 
 let urlFolderPng=path.join(rendererPath.res, "Folder.png")
                         

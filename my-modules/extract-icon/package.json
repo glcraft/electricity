@@ -2,7 +2,7 @@
   "name": "extract-icon",
   "version": "0.0.0",
   "description": "Extract Windows icons",
-  "main": "hello.js",
+  "main": "export.js",
   "private": true,
   "dependencies": {
     "bindings": "~1.2.1",
