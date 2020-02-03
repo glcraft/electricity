@@ -24,7 +24,7 @@ fs.readdir(currentPath,(err, files)=>{
         files.forEach((value) => {
             var elem = document.createElement("div");
             var pathItem = `${currentPath}/${value}`
-            elem.classList.add("explorer-list-item");//{path: value, parent: elem}
+            elem.classList.add("explorer-item", "explorer-list-item");//{path: value, parent: elem}
             elem.id = uuid()
             
             let img = document.createElement("img")

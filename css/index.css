@@ -20,6 +20,11 @@ body
     border-width: 1px;
 
 }
+.explorer-item
+{
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: small;
+}
 .explorer-list
 {
     display: list-item;
