@@ -8,7 +8,7 @@ let expl = document.getElementsByClassName("explorer")
 let geticon=extractIcon
 const rendererPath = new RendererPath(__dirname)
 
-const currentPath = `${__dirname}/..`
+const currentPath = `${process.cwd()}`
 
 let urlFolderPng=path.join(rendererPath.res, "Folder.png")
                         
