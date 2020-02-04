@@ -66,4 +66,7 @@ function gotoFolder(currentPath: string)
     });
     
 }
+
+currentExplorer.classList.add("explorer-list");
+(currentExplorer as HTMLElement).dataset.type="list"
 gotoFolder(firstPath)
