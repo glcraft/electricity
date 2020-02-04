@@ -10,7 +10,12 @@ const rendererPath = new RendererPath(__dirname)
 
 const firstPath = `${process.cwd()}`
 
-const urlFolderPng=`file:///${path.join(rendererPath.res, "Folder.png")}`.replace(/\\/g, "/")
+function getResource(filename: string)
+{
+    return `file:///${path.join(rendererPath.res, filename)}`.replace(/\\/g, "/")
+}
+
+const urlFolderPng=getResource("Folder.png")
 function updateBreadcrumb(currentPath: string)
 {
     let nodeBC = document.getElementById("breadcrumb-explorer")
@@ -20,11 +25,22 @@ function updateBreadcrumb(currentPath: string)
     const parsedPath = path.parse(currentPath)
     let BCFields: string[]=parsedPath.dir.split(/[\\/]/g);
     BCFields.push(parsedPath.base)
+    let createBCSeparator = ()=>{
+        let nodeItem = document.createElement("li")
+        nodeItem.classList.add("bc-item", "explorer-hoverable")
+        let nodeSep = document.createElement("img")
+        nodeSep.setAttribute("src",getResource("breadcrumb_sep.png"))
+        nodeSep.classList.add("bc-sep")
+
+        nodeItem.append(nodeSep)
+        nodeBC.append(nodeItem)
+    }
     let createBCItem = field=>{
         let nodeItem = document.createElement("li")
-        nodeItem.classList.add("bc-item")
+        nodeItem.classList.add("bc-item", "explorer-hoverable")
         nodeItem.innerText=field
         nodeBC.append(nodeItem)
+        createBCSeparator()
     }
     BCFields.forEach(createBCItem)
 }
@@ -40,7 +56,7 @@ function gotoFolder(currentPath: string)
             files.forEach((value) => {
                 var elem = document.createElement("div");
                 var pathItem = `${currentPath}/${value}`
-                elem.classList.add("explorer-item", "explorer-list-item");//{path: value, parent: elem}
+                elem.classList.add("explorer-item", "explorer-list-item", "explorer-hoverable");//{path: value, parent: elem}
                 elem.id = uuid()
                 
                 let img = document.createElement("img")
@@ -61,7 +77,7 @@ function gotoFolder(currentPath: string)
                         }
                         else 
                         {
-                            let b64Icon = geticon.geticon(`D:/Projects/electricity/${value}`)
+                            let b64Icon = geticon.geticon(`${currentPath}/${value}`)
                             srcimg=`data:image/png;base64,${b64Icon}`;
                             elem.dataset.type="file"
                         }
