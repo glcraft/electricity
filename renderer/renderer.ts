@@ -27,7 +27,7 @@ function gotoFolder(currentPath: string)
 {
     const pugItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
     currentPath = path.resolve(currentPath)
-    // let lsFilesToPug = new Array<FileInfoPug>();
+    
     bc.update(currentPath);
     fs.readdir(currentPath,(err, files)=>{
         if (err)
@@ -35,6 +35,7 @@ function gotoFolder(currentPath: string)
             console.log(`Erreur lecture du dossier ${currentPath}`, err);
             return;
         }
+        let lsFilesInfo = new Array<FileInfoPug>();
         for (let iFile = 0;iFile<files.length;++iFile)
         {
             let value = files[iFile];
@@ -54,24 +55,10 @@ function gotoFolder(currentPath: string)
                 currentFile.img=urlFilePng
                 currentFile.type="file"
             }
-            currentExplorer.append(utils.stringToDom(pugItem(currentFile)))
-            // lsFilesToPug.push(currentFile)
+            lsFilesInfo.push(currentFile)
         }
-
-        ///PARTITION FOLDER/FILE
-        {
-            let b = currentExplorer.children
-            let i2=0
-            for(let i1=0;i1<b.length;i1++)
-            {
-                let v=b[i1] as HTMLElement;
-                if (v.dataset.type=="dir")
-                {
-                    currentExplorer.insertBefore(b[i1], b[i2]);
-                    i2++
-                }
-            }
-        }
+        utils.stable_partition(lsFilesInfo, v=>v.type=="dir")
+        lsFilesInfo.forEach((currentFile)=>{currentExplorer.append(utils.stringToDom(pugItem(currentFile)))})
     });
     
 }
