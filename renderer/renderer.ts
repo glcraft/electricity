@@ -44,7 +44,10 @@ function gotoFolder(currentPath: string)
             let stats = fs.lstatSync(pathItem)
             currentFile.name = value;
             if (err)
+            {
+                currentFile.img = urlFilePng
                 currentFile.type="unknown"
+            }
             else if (stats.isDirectory())
             {
                 currentFile.img=urlFolderPng
@@ -52,7 +55,8 @@ function gotoFolder(currentPath: string)
             }
             else
             {
-                currentFile.img=urlFilePng
+                let b64Icon = geticon.geticon(`${currentPath}/${value}`)
+                currentFile.img=`data:image/png;base64,${b64Icon}`;
                 currentFile.type="file"
             }
             lsFilesInfo.push(currentFile)
