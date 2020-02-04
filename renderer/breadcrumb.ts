@@ -14,6 +14,9 @@ export function update(currentPath: string)
     let BCFields: string[]=parsedPath.dir.split(/[\\/]/g);
     BCFields.push(parsedPath.base)
     let createBCItem = field=>{
+        let t = /(\w):/.exec(field);
+        if (t)
+            field = `Disque ${t[1]}`
         let htmlBCItem = pugBCItem({name: field, sepfile: utils.getResourceURL("breadcrumb_sep.png")})
         nodeBC.append(utils.stringToDom(htmlBCItem))
     }
