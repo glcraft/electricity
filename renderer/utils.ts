@@ -13,3 +13,24 @@ export function stringToDom(html:string) : Node
     t.innerHTML = html;
     return t.content.cloneNode(true);
 }
+export function stable_partition<T>(array: Array<T>, validate: (t1:T)=>boolean): number//, swap?:(t1:T, t2:T)=>void)
+{
+    let i2=0
+    for(let i1=0;i1<array.length;i1++)
+    {
+        let v=array[i1];
+        if (validate(v))
+        {
+            // if (swap)
+            //     swap(array[i1], array[i2])
+            // else
+            {
+                ///Partition stable
+                array.splice(i2, 0, array[i1])
+                array.splice(i1+1, 1)
+            }
+            i2++
+        }
+    }
+    return i2;
+}
