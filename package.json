@@ -18,14 +18,17 @@
   "author": "GLCraft",
   "license": "ISC",
   "dependencies": {
+    "@types/pug": "^2.0.4",
     "bindings": "^1.5.0",
     "electron": "^7.1.11",
-    "extract-icon": "file:my-modules/extract-icon",
+    "extract-icon": "file:./my-modules/extract-icon",
+    "pug": "^2.0.4",
     "subpackage": "^1.1.0",
     "uuid": "^3.4.0"
   },
   "devDependencies": {
     "electron-rebuild": "^1.10.0",
+    "nan": "^2.14.0",
     "node-abi": "^2.13.0",
     "npm-run-all": "^4.1.5",
     "typescript": "^3.7.5"

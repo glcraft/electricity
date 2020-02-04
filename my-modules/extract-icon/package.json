@@ -5,16 +5,16 @@
   "main": "export.js",
   "private": true,
   "dependencies": {
-    "bindings": "~1.2.1",
-    "nan": "^2.0.0"
+    "bindings": "~1.2.1"
   },
   "scripts": {
     "test": "node .",
-    "build": "node-gyp build",
-    "postinstall": "node-gyp configure"
+    "build": "electron-rebuild",
+    "postinstall": "electron-rebuild"
   },
   "gypfile": true,
   "devDependencies": {
-    "electron-rebuild": "^1.10.0"
+    "electron-rebuild": "^1.10.0",
+    "nan": "^2.14.0"
   }
 }
