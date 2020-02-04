@@ -14,69 +14,60 @@ const firstPath = `${process.cwd()}`
 
 
 const urlFolderPng=utils.getResourceURL("Folder.png")
+const urlFilePng=utils.getResourceURL("File.png")
+
+class FileInfoPug
+{
+    type: string;
+    img: string;
+}
 
 function gotoFolder(currentPath: string)
 {
     currentPath = path.resolve(currentPath)
+    let lsFilesToPug = new Array<FileInfoPug>();
     fs.readdir(currentPath,(err, files)=>{
         if (err)
-            console.error("ya eu un probleme ", err)
-        else
         {
-            let i=0;
-            files.forEach((value) => {
-                var elem = document.createElement("div");
-                var pathItem = `${currentPath}/${value}`
-                elem.classList.add("explorer-item", "explorer-list-item", "explorer-hoverable");//{path: value, parent: elem}
-                elem.id = uuid()
-                
-                let img = document.createElement("img")
-                img.setAttribute("src",``)
-                elem.append(img)
-                let divName = document.createElement("div")
-                divName.textContent=value
-                elem.append(divName)
-                expl[0].append(elem)
-                fs.lstat(pathItem, async (err, stats)=>{
-                    if (!err)
-                    {
-                        let srcimg: string;
-                        if (stats.isDirectory())
-                        {
-                            srcimg=urlFolderPng
-                            elem.dataset.type="dir"
-                        }
-                        else 
-                        {
-                            let b64Icon = geticon.geticon(`${currentPath}/${value}`)
-                            srcimg=`data:image/png;base64,${b64Icon}`;
-                            elem.dataset.type="file"
-                        }
-                        img.setAttribute("src",srcimg)
-                    }
-                    else
-                        elem.dataset.type="unknown"
-                    i++
-                    if (i==(files.length))
-                    {
-                        let b = expl[0].children
-                        let i2=0
-                        for(let i1=0;i1<b.length;i1++)
-                        {
-                            let v=b[i1] as HTMLElement;
-                            if (v.dataset.type=="dir")
-                            {
-                                expl[0].insertBefore(b[i1], b[i2]);
-                                i2++
-                            }
-                        }
-                    }
-                    
-                })
-            })
-            
+            console.log(`Erreur lecture du dossier ${currentPath}`, err);
+            return;
         }
-    })
-    bc.update(currentPath);
+        for (let iFile = 0;iFile<files.length;++iFile)
+        {
+            let value = files[iFile];
+            let currentFile:FileInfoPug = new FileInfoPug();
+            let pathItem = `${currentPath}/${value}`
+            let stats = fs.lstatSync(pathItem)
+            if (err)
+                currentFile.type="unknown"
+            else if (stats.isDirectory())
+            {
+                currentFile.img=urlFolderPng
+                currentFile.type="dir"
+            }
+            else
+            {
+                currentFile.img=urlFilePng
+                currentFile.type="file"
+            }
+            lsFilesToPug.push(currentFile)
+        }
+        ///PARTITION FOLDER/FILE
+        {
+            let b = expl[0].children
+            let i2=0
+            for(let i1=0;i1<b.length;i1++)
+            {
+                let v=b[i1] as HTMLElement;
+                if (v.dataset.type=="dir")
+                {
+                    expl[0].insertBefore(b[i1], b[i2]);
+                    i2++
+                }
+            }
+        }
+        bc.update(currentPath);    
+    });
+    
 }
 gotoFolder(firstPath)
