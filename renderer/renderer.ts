@@ -3,6 +3,7 @@ import * as path from 'path'
 import * as uuid from 'uuid/v4'
 import {extractIcon} from 'extract-icon'
 import {RendererPath} from './RendererPath'
+import * as pug from 'pug'
 
 let expl = document.getElementsByClassName("explorer")
 let geticon=extractIcon
@@ -10,9 +11,17 @@ const rendererPath = new RendererPath(__dirname)
 
 const firstPath = `${process.cwd()}`
 
+const pugBCItem = pug.compileFile(path.join(rendererPath.views, "breadcrumb", "item.pug"))
+
 function getResource(filename: string)
 {
     return `file:///${path.join(rendererPath.res, filename)}`.replace(/\\/g, "/")
+}
+function stringToDom(html:string) : Node
+{
+    var t = document.createElement('template');
+    t.innerHTML = html;
+    return t.content.cloneNode(true);
 }
 
 const urlFolderPng=getResource("Folder.png")
@@ -36,11 +45,8 @@ function updateBreadcrumb(currentPath: string)
         nodeBC.append(nodeItem)
     }
     let createBCItem = field=>{
-        let nodeItem = document.createElement("li")
-        nodeItem.classList.add("bc-item", "explorer-hoverable")
-        nodeItem.innerText=field
-        nodeBC.append(nodeItem)
-        createBCSeparator()
+        let htmlBCItem = pugBCItem({name: field, sepfile: getResource("breadcrumb_sep.png")})
+        nodeBC.append(stringToDom(htmlBCItem))
     }
     BCFields.forEach(createBCItem)
 }
