@@ -8,7 +8,10 @@ import * as bc from './breadcrumb'
 
 
 const explorers = document.getElementsByClassName("explorer")
+const tabs = document.getElementsByClassName("tab")
 let currentExplorer = explorers[0]
+let currentTabs = tabs[0]
+
 let geticon=extractIcon
 
 const firstPath = process.cwd()
@@ -39,6 +42,7 @@ function gotoFolder(currentPath: string)
     currentPath = path.resolve(currentPath)
     
     bc.update(currentPath);
+    currentTabs.textContent=path.basename(currentPath)
     fs.readdir(currentPath,(err, files)=>{
         if (err)
         {
