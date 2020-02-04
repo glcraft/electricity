@@ -22,9 +22,19 @@ class FileInfoPug
     img: string;
     name: string;
 }
+function clearElement(exp: Element)
+{
+    while (exp.firstChild) {
+        exp.removeChild(exp.firstChild);
+    }
+}
 
 function gotoFolder(currentPath: string)
 {
+    clearElement(currentExplorer);
+    while (currentExplorer.firstChild) {
+        currentExplorer.removeChild(currentExplorer.firstChild);
+    }
     const pugItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
     currentPath = path.resolve(currentPath)
     
