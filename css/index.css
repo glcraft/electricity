@@ -38,8 +38,10 @@ body
 .explorer-list-item
 {
     display: flex;
-    
-    
+}
+.explorer-list-item > div
+{
+    margin-left: 0.5em;
 }
 .explorer-list-item > img
 {
