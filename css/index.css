@@ -16,21 +16,26 @@ body
 #tab-bar 
 {
     background-color: white;
-    border-color: black;
     width: 100%;
-    border-style: solid;
-    border-width: 1px;
-
+    display: flex;
 }
 .tab
 {
-    margin:0px;
-    /* border: 1px solid rgb(185, 185, 185); */
-    border-radius: 5px 5px 0px 0px;
-    background-color: rgb(226, 226, 226);
-    height: auto;
-    padding-left: 0.5em;
-    padding-Right: 0.5em;
+    user-select: none;
+    margin: 0px;
+    min-width: 50px;
+    width: 200px;
+    text-align: center;
+
+    border-top: 3px solid rgba(0, 0, 0, 0.5);
+    border-right: 0.5px solid rgba(0, 0, 0, 0.5);
+    border-radius: 3px 3px 0px 0px;
+    background-color: rgb(245, 245, 245);
+    padding: 0.2em 0.5em;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 .tab.selected
 {
