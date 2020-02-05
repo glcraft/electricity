@@ -34,3 +34,9 @@ export function stable_partition<T>(array: Array<T>, validate: (t1:T)=>boolean):
     }
     return i2;
 }
+export function clearElement(exp: Element)
+{
+    while (exp.firstChild) {
+        exp.removeChild(exp.firstChild);
+    }
+}
