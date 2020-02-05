@@ -1,5 +1,3 @@
-import * as explorer from './explorer'
+require("./explorer")
 
 const firstPath = process.cwd()
-
-explorer.gotoFolder(firstPath)

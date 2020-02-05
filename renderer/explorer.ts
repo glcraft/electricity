@@ -5,7 +5,7 @@ import * as bc from './breadcrumb'
 import * as utils from './utils'
 import {extractIcon} from 'extract-icon'
 
-const explorers = document.getElementsByClassName("explorer")
+// = document.getElementsByClassName("explorer")
 const tabs = document.getElementsByClassName("tab")
 // let currentExplorer = explorers[0]
 let currentTabs = tabs[0]
@@ -30,9 +30,13 @@ class Explorer
     
     constructor(expElem: HTMLElement)
     {this.explorer=expElem}
-    path(): string 
+    getPath(): string 
     {
         return this.currentPath;
+    }
+    getElement():HTMLElement
+    {
+        return this.explorer;
     }
     goto(pathFolder: string)
     {
@@ -101,13 +105,32 @@ class Explorer
     }
 }
 
-//INITIAL
-explorers[0].classList.add("explorer-list");
-(explorers[0] as HTMLElement).dataset.type="list"
-
-let currentExplorer = new Explorer(explorers[0] as HTMLElement)
+let explorers: Array<Explorer> = new Array<Explorer>();
+let currentExplorer:Explorer;
+let sassExplorer = document.getElementById("sass-explorer")
 
 export function gotoFolder(currentPath: string)
 {
     currentExplorer.goto(currentPath)
 }
+export function setCurrentExplorer(index: number)
+{
+    if (sassExplorer.hasChildNodes())
+        sassExplorer.removeChild(currentExplorer.getElement())
+    currentExplorer = explorers[index]
+    sassExplorer.appendChild(currentExplorer.getElement())
+}
+
+//INITIAL
+let vPaths=[
+    process.cwd(),
+    "C:\\",
+    "C:\\Users\\Gabin\\Documents"
+]
+vPaths.forEach((p)=>{
+    let exp = new Explorer(utils.pugDom('.explorer.explorer-list(data-type="list")') as HTMLElement)
+    exp.goto(p)
+    explorers.push(exp)
+})
+
+setCurrentExplorer(0)

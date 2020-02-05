@@ -1,4 +1,5 @@
 import * as path from 'path'
+import * as pug from 'pug'
 import {RendererPath} from './RendererPath'
 
 export const renderer_path = new RendererPath(__dirname)
@@ -48,4 +49,8 @@ export function getFolderName(p:string) {
     {
         return path.basename(p);
     }
+}
+export function pugDom(pugString:string) : Node
+{
+    return stringToDom(pug.render(pugString)).firstChild;
 }
