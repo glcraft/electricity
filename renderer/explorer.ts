@@ -41,7 +41,10 @@ class Explorer
         if (tabElem)
             this.tab=tabElem
         else
+        {
             this.tab=utils.stringToDom(pugTabItem({name:""})).firstChild as HTMLElement;
+            this.tab.onclick=()=>setCurrentExplorer(this)
+        }
             
     }
     getPath(): string 
@@ -130,13 +133,16 @@ export function gotoFolder(currentPath: string)
 {
     currentExplorer.goto(currentPath)
 }
-export function setCurrentExplorer(index: number)
+export function setCurrentExplorer(exp: Explorer|number)
 {
     if (sassExplorer.hasChildNodes())
         sassExplorer.removeChild(currentExplorer.getExplorerElement())
     if (currentExplorer)
         currentExplorer.getTabElement().classList.remove("selected")
-    currentExplorer = explorers[index]
+    if (typeof exp === "number")
+        currentExplorer = explorers[exp]
+    else
+        currentExplorer = exp;
     currentExplorer.getTabElement().classList.add("selected")
     sassExplorer.appendChild(currentExplorer.getExplorerElement())
     currentExplorer.update()
