@@ -19,6 +19,7 @@ currentExplorer.classList.add("explorer-list");
 
 class FileInfoPug
 {
+    path: string;
     type: string;
     img: string;
     name: string;
@@ -27,7 +28,7 @@ class FileInfoPug
 export function gotoFolder(currentPath: string)
 {
     utils.clearElement(currentExplorer);
-    const pugItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
+    const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
     currentPath = path.resolve(currentPath)
     
     bc.update(currentPath);
@@ -43,10 +44,10 @@ export function gotoFolder(currentPath: string)
         {
             let value = files[iFile];
             let currentFile:FileInfoPug = new FileInfoPug();
-            let pathItem = `${currentPath}/${value}`
+            currentFile.path = `${currentPath}/${value}`
+            currentFile.name = value;
             try {
-                currentFile.name = value;
-                let stats = fs.lstatSync(pathItem)
+                let stats = fs.lstatSync(currentFile.path)
                 if (err)
                 {
                     currentFile.img = urlFilePng
@@ -59,7 +60,7 @@ export function gotoFolder(currentPath: string)
                 }
                 else
                 {
-                    let b64Icon = extractIcon.geticon(`${currentPath}/${value}`)
+                    let b64Icon = extractIcon.geticon(currentFile.path)
                     currentFile.img=`data:image/png;base64,${b64Icon}`;
                     currentFile.type="file"
                 }
@@ -73,7 +74,13 @@ export function gotoFolder(currentPath: string)
             lsFilesInfo.push(currentFile)
         }
         utils.stable_partition(lsFilesInfo, v=>v.type=="dir")
-        lsFilesInfo.forEach((currentFile)=>{currentExplorer.append(utils.stringToDom(pugItem(currentFile)))})
+        lsFilesInfo.forEach((currentFile)=>{
+            let nodeFile = utils.stringToDom(pugExplorerItem(currentFile));
+            if (currentFile.type=="dir")
+                (nodeFile.childNodes[0] as HTMLElement).onclick = ()=>{
+                    gotoFolder(currentFile.path)
+                }
+            currentExplorer.append(nodeFile)
+        })
     });
-    
 }
