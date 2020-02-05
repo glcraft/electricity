@@ -41,11 +41,11 @@ export function clearElement(exp: Element)
     }
 }
 export function getFolderName(p:string) {
-    let t = /(\w):[\\/]?/.exec(p);
+    let t = /^(\w):[\\/]?$/.exec(p);
     if (t)
         return `Disque ${t[1]}`
     else 
     {
-        path.basename(p);
+        return path.basename(p);
     }
 }

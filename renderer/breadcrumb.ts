@@ -22,7 +22,7 @@ export function update(currentPath: string)
         else
             pathButton = field+path.sep
             
-        field = utils.getFolderName(currentPath)
+        field = utils.getFolderName(pathButton)
         
         let htmlBCItem = pugBCItem({name: field, sepfile: utils.getResourceURL("breadcrumb_sep.png")})
         let nodeBCItem = utils.stringToDom(htmlBCItem);
