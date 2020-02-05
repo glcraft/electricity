@@ -133,11 +133,15 @@ export function setCurrentExplorer(index: number)
 }
 
 //INITIAL
-let vPaths=[
+let vPaths:Array<string>;
+if (process.platform==="win32")
+{
+    vPaths=[
     process.cwd(),
-    "C:\\",
-    "C:\\Users\\Gabin\\Documents"
+        process.env.SystemDrive+path.sep,
+        process.env.HOMEDRIVE+process.env.HOMEPATH
 ]
+}
 let i=0;
 let tabsBar=document.getElementById("tab-bar")
 vPaths.forEach((p)=>{
