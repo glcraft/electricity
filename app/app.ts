@@ -20,6 +20,9 @@ function initVars()
             nodeIntegration: true
         }
     });
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show()
+    })
 }
 app.on('ready', async () => {
     initVars();
