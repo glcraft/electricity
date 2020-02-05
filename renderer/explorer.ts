@@ -64,8 +64,6 @@ class Explorer
     public update()
     {
         let t: Array<number>;
-        utils.clearElement(this.explorer);
-        const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
         this.currentPath = path.resolve(this.currentPath)
         
         bc.update(this.currentPath);
@@ -111,6 +109,7 @@ class Explorer
                 lsFilesInfo.push(currentFile)
             }
             utils.stable_partition(lsFilesInfo, v=>v.type=="dir")
+            utils.clearElement(this.explorer);
             lsFilesInfo.forEach((currentFile)=>{
                 let nodeFile = utils.stringToDom(pugExplorerItem(currentFile));
                 if (currentFile.type=="dir")
@@ -140,6 +139,7 @@ export function setCurrentExplorer(index: number)
     currentExplorer = explorers[index]
     currentExplorer.getTabElement().classList.add("selected")
     sassExplorer.appendChild(currentExplorer.getExplorerElement())
+    currentExplorer.update()
 }
 
 //INITIAL
@@ -147,10 +147,10 @@ let vPaths:Array<string>;
 if (process.platform==="win32")
 {
     vPaths=[
-    process.cwd(),
+        process.cwd(),
         process.env.SystemDrive+path.sep,
         process.env.HOMEDRIVE+process.env.HOMEPATH
-]
+    ]
 }
 let i=0;
 let tabsBar=document.getElementById("tab-bar")
