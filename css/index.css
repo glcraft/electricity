@@ -94,6 +94,7 @@ body
     padding-left: 0.2em;
     padding-right: 0.2em;
     user-select: none; 
+    cursor: pointer;
 }
 .bc-item:hover
 {
