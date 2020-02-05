@@ -6,7 +6,6 @@ import * as nodeAbi from 'node-abi'
 console.log (`node ABI: ${nodeAbi.getAbi('12.14.0', 'node')}`)
 console.log (`electron ABI: ${nodeAbi.getAbi('7.1.11', 'electron')}`)
 
-
 let mainWindow: BrowserWindow;
 let appPaths: ApplicationPath;
 
@@ -14,8 +13,9 @@ function initVars()
 {
     appPaths = new ApplicationPath(__dirname);
     mainWindow = new BrowserWindow({ 
-        width: 800, 
-        height: 600,
+        width: 1920/4*3, 
+        height: 1080/4*3,
+        show: false,
         webPreferences: {
             nodeIntegration: true
         }
