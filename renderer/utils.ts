@@ -40,3 +40,12 @@ export function clearElement(exp: Element)
         exp.removeChild(exp.firstChild);
     }
 }
+export function getFolderName(p:string) {
+    let t = /(\w):[\\/]?/.exec(p);
+    if (t)
+        return `Disque ${t[1]}`
+    else 
+    {
+        path.basename(p);
+    }
+}
