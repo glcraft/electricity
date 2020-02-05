@@ -77,7 +77,7 @@ export function gotoFolder(currentPath: string)
         lsFilesInfo.forEach((currentFile)=>{
             let nodeFile = utils.stringToDom(pugExplorerItem(currentFile));
             if (currentFile.type=="dir")
-                (nodeFile.childNodes[0] as HTMLElement).onclick = ()=>{
+                (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{
                     gotoFolder(currentFile.path)
                 }
             currentExplorer.append(nodeFile)
