@@ -67,13 +67,9 @@ body
     margin-bottom: auto;
 }
 
-.explorer-list-item[data-type="dir"]
+.explorer-list-item[data-type="unknown"]
 {
-    order: 1;
-}
-.explorer-list-item[data-type="file"]
-{
-    order: 2;
+    color: gray;
 }
 .explorer-hoverable
 {
