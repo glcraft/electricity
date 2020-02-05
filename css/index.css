@@ -39,6 +39,7 @@ body
 .explorer
 {
     user-select: none; 
+    overflow: auto;
 }
 .explorer-item
 {
