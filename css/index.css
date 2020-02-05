@@ -89,7 +89,7 @@ body
 
 .bc-item
 {
-    display: inline;
+    display: inline-table;
     margin: auto;
     padding-left: 0.2em;
     padding-right: 0.2em;
