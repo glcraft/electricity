@@ -13,6 +13,9 @@ let currentTabs = tabs[0]
 const urlFolderPng=utils.getResourceURL("Folder.png")
 const urlFilePng=utils.getResourceURL("File.png")
 
+const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
+const pugTabItem = pug.compileFile(path.join(utils.renderer_path.views, "tabs", "item.pug"))
+
 
 
 class FileInfoPug
@@ -26,6 +29,7 @@ class FileInfoPug
 class Explorer
 {
     private explorer: HTMLElement;
+    private tab: HTMLElement;
     private currentPath: string;
     
     constructor(expElem: HTMLElement)
@@ -34,9 +38,13 @@ class Explorer
     {
         return this.currentPath;
     }
-    getElement():HTMLElement
+    getExplorerElement():HTMLElement
     {
         return this.explorer;
+    }
+    getTabElement():HTMLElement
+    {
+        return this.tab;
     }
     goto(pathFolder: string)
     {
@@ -51,7 +59,7 @@ class Explorer
         this.currentPath = path.resolve(this.currentPath)
         
         bc.update(this.currentPath);
-        currentTabs.textContent=utils.getFolderName(this.currentPath)
+        this.tab.textContent=utils.getFolderName(this.currentPath)
         fs.readdir(this.currentPath,(err, files)=>{
             if (err)
             {
@@ -116,9 +124,12 @@ export function gotoFolder(currentPath: string)
 export function setCurrentExplorer(index: number)
 {
     if (sassExplorer.hasChildNodes())
-        sassExplorer.removeChild(currentExplorer.getElement())
+        sassExplorer.removeChild(currentExplorer.getExplorerElement())
+    if (currentExplorer)
+        currentExplorer.getTabElement().classList.remove("selected")
     currentExplorer = explorers[index]
-    sassExplorer.appendChild(currentExplorer.getElement())
+    currentExplorer.getTabElement().classList.add("selected")
+    sassExplorer.appendChild(currentExplorer.getExplorerElement())
 }
 
 //INITIAL
@@ -127,10 +138,16 @@ let vPaths=[
     "C:\\",
     "C:\\Users\\Gabin\\Documents"
 ]
+let i=0;
+let tabsBar=document.getElementById("tab-bar")
 vPaths.forEach((p)=>{
-    let exp = new Explorer(utils.pugDom('.explorer.explorer-list(data-type="list")') as HTMLElement)
+    
+    let exp = new Explorer()
+    exp.getTabElement().innerText = utils.getFolderName(p)
+    tabsBar.appendChild(exp.getTabElement())
     exp.goto(p)
     explorers.push(exp)
+    ++i
 })
 
 setCurrentExplorer(0)
