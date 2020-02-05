@@ -32,8 +32,18 @@ class Explorer
     private tab: HTMLElement;
     private currentPath: string;
     
-    constructor(expElem: HTMLElement)
-    {this.explorer=expElem}
+    constructor(expElem?: HTMLElement, tabElem?:HTMLElement)
+    {
+        if (expElem)
+            this.explorer=expElem
+        else
+            this.explorer=utils.pugDom('.explorer.explorer-list(data-type="list")') as HTMLElement;
+        if (tabElem)
+            this.tab=tabElem
+        else
+            this.tab=utils.stringToDom(pugTabItem({name:""})).firstChild as HTMLElement;
+            
+    }
     getPath(): string 
     {
         return this.currentPath;
