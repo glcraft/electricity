@@ -12,6 +12,9 @@ body
     font-family: Segoe UI, Arial, Helvetica, sans-serif;
     margin: 0px;
     background-color: white;
+    display: flex;
+    flex-flow: column;
+    height: 100vh;
 }
 #tab-bar 
 {
@@ -41,10 +44,14 @@ body
 {
     background-color: rgb(173, 198, 245);
 }
+#sass-explorer
+{
+    flex: 1;
+    overflow-y: auto;
+}
 .explorer
 {
     user-select: none; 
-    overflow: auto;
 }
 .explorer-item
 {
