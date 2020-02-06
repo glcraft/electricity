@@ -26,6 +26,7 @@ class FileInfoPug
 class HistoryData
 {
     path: string
+    scroll: number
 }
 class ExplorerHistory {
     
@@ -54,11 +55,11 @@ class ExplorerHistory {
         if (this.currentpos!==oldpos)
             this.onChangeHistory(this.hist[this.currentpos])
     }
-    pushState(path: string): void
+    pushState(data: HistoryData): void
     {
         ++this.currentpos
         this.hist.length=this.currentpos
-        this.hist.push({path: path})
+        this.hist.push(data)
     }
     // replaceState(path: string): void
     // {
@@ -114,7 +115,7 @@ class Explorer
     goto(pathFolder: string)
     {
         this.currentPath=pathFolder;
-        this.history.pushState(pathFolder);
+        this.history.pushState({path:pathFolder, scroll: 0});
         this.update()
     }
     previous()
