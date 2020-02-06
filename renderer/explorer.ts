@@ -23,13 +23,55 @@ class FileInfoPug
     img: string;
     name: string;
 }
+class HistoryData
+{
+    path: string
+}
+class ExplorerHistory {
+    
+    readonly length: number;
+    scrollRestoration: ScrollRestoration;
+    readonly state: any;
+    private hist : Array<HistoryData> = new Array<HistoryData>()
+    private currentpos:number = -1;
+    private stocksize:number = 0;
+
+    onChangeHistory:(d:HistoryData)=>void;
+    
+    back(): void
+    {
+        this.go(-1)
+    }
+
+    forward(): void
+    {
+        this.go(1)
+    }
+    go(delta?: number): void
+    {
+        let oldpos = this.currentpos
+        this.currentpos=Math.max(0, Math.min(this.hist.length-1, this.currentpos+delta));
+        if (this.currentpos!==oldpos)
+            this.onChangeHistory(this.hist[this.currentpos])
+    }
+    pushState(path: string): void
+    {
+        ++this.currentpos
+        this.hist.length=this.currentpos
+        this.hist.push({path: path})
+    }
+    // replaceState(path: string): void
+    // {
+        
+    // }
+}
 
 class Explorer
 {
     private explorer: HTMLElement;
     private tab: HTMLElement;
     private currentPath: string;
-    private history:UndoRedo;
+    private history:ExplorerHistory = new ExplorerHistory();
     
     constructor(expElem?: HTMLElement, tabElem?:HTMLElement)
     {
@@ -44,7 +86,7 @@ class Explorer
             this.tab=utils.stringToDom(pugTabItem({name:""})).firstChild as HTMLElement;
             this.tab.onclick=()=>setCurrentExplorer(this)
         }
-        
+        this.history.onChangeHistory=(data)=>this.gotoForHistory(data)
     }
     getPath(): string 
     {
@@ -58,22 +100,28 @@ class Explorer
     {
         return this.tab;
     }
+    gotoForHistory(data: HistoryData)
+    {
+        this.currentPath=data.path;
+        this.update()
+    }
     goto(pathFolder: string)
     {
         this.currentPath=pathFolder;
+        this.history.pushState(pathFolder);
         this.update()
     }
     previous()
     {
-
+        this.history.back()
     }
     next()
     {
-        
+        this.history.forward()
     }
     up()
     {
-        
+        this.goto(path.dirname(this.currentPath))
     }
     public update()
     {
@@ -146,18 +194,15 @@ export function gotoFolder(currentPath: string)
 }
 export function previous()
 {
-    console.log("prev")
-    // currentExplorer.previous()
+    currentExplorer.previous()
 }
 export function next()
 {
-    console.log("next")
-    // currentExplorer.next()
+    currentExplorer.next()
 }
 export function up()
 {
-    console.log("up")
-    // currentExplorer.up()
+    currentExplorer.up()
 }
 export function setCurrentExplorer(exp: Explorer|number)
 {
