@@ -121,7 +121,9 @@ class Explorer
     }
     up()
     {
-        this.goto(path.dirname(this.currentPath))
+        let newPath = path.dirname(this.currentPath);
+        if (newPath!==this.currentPath)
+            this.goto(newPath)
     }
     public update()
     {
