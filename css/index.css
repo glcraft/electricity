@@ -93,7 +93,11 @@ body
     background-color: rgb(200, 212, 228);
     border: 1px solid rgb(146, 176, 218); 
 }
-
+.breadcrumb
+{
+    margin:  0px;
+    padding: 0;
+}
 .bc-item
 {
     display: inline-table;
@@ -112,11 +116,16 @@ body
 {
     width: 0.75em;
 }
-.breadcrumb
+
+#address-bar
 {
     border: 1px solid gray;
     list-style: none;
     padding: 0px;
     padding-left: 1em;
     margin: 0px;
+}
+#nav > img
+{
+    width: 2em;
 }

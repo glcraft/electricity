@@ -16,8 +16,6 @@ const urlFilePng=utils.getResourceURL("File.png")
 const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
 const pugTabItem = pug.compileFile(path.join(utils.renderer_path.views, "tabs", "item.pug"))
 
-
-
 class FileInfoPug
 {
     path: string;
@@ -31,6 +29,7 @@ class Explorer
     private explorer: HTMLElement;
     private tab: HTMLElement;
     private currentPath: string;
+    private history:UndoRedo;
     
     constructor(expElem?: HTMLElement, tabElem?:HTMLElement)
     {
@@ -45,7 +44,7 @@ class Explorer
             this.tab=utils.stringToDom(pugTabItem({name:""})).firstChild as HTMLElement;
             this.tab.onclick=()=>setCurrentExplorer(this)
         }
-            
+        
     }
     getPath(): string 
     {
@@ -63,6 +62,18 @@ class Explorer
     {
         this.currentPath=pathFolder;
         this.update()
+    }
+    previous()
+    {
+
+    }
+    next()
+    {
+        
+    }
+    up()
+    {
+        
     }
     public update()
     {
@@ -133,6 +144,21 @@ export function gotoFolder(currentPath: string)
 {
     currentExplorer.goto(currentPath)
 }
+export function previous()
+{
+    console.log("prev")
+    // currentExplorer.previous()
+}
+export function next()
+{
+    console.log("next")
+    // currentExplorer.next()
+}
+export function up()
+{
+    console.log("up")
+    // currentExplorer.up()
+}
 export function setCurrentExplorer(exp: Explorer|number)
 {
     if (sassExplorer.hasChildNodes())
@@ -170,4 +196,13 @@ vPaths.forEach((p)=>{
     ++i
 })
 
+
+
+let navElem=document.getElementById("nav");
+["previous", "next", "up"].forEach(element => {
+    let urlimg = utils.getResourceURL(`nav/${element}.png`)
+    let nodeNavBut = utils.pugDom(`img(src="${urlimg}")`) as HTMLElement
+    nodeNavBut.onclick=exports[element]
+    navElem.appendChild(nodeNavBut)
+});
 setCurrentExplorer(0)
