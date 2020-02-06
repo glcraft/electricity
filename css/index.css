@@ -39,6 +39,19 @@ body
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
+    
+    
+    /* background-position-x: -10px; */
+}
+.tab-background
+{
+    transition: ease 1s;
+    opacity: 0.1;
+}
+.tab:hover
+{
+    transition: ease 1s;
+    opacity: 1;
 }
 .tab.selected
 {
@@ -97,6 +110,8 @@ body
 {
     margin:  0px;
     padding: 0;
+    padding: auto;
+    margin:  auto 0;
 }
 .bc-item
 {
@@ -121,11 +136,20 @@ body
 {
     border: 1px solid gray;
     list-style: none;
-    padding: 0px;
-    padding-left: 1em;
     margin: 0px;
+    display: flex;
+}
+#nav
+{
+    margin: 0 1em;
+    display: flex;
 }
 #nav > img
 {
     width: 2em;
+    margin: auto 0;
+}
+#nav > img:hover
+{
+    filter: invert(64%) sepia(64%) saturate(120%) hue-rotate(175deg) brightness(160%) contrast(84%);
 }

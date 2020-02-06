@@ -83,8 +83,14 @@ class Explorer
             this.tab=tabElem
         else
         {
-            this.tab=utils.stringToDom(pugTabItem({name:""})).firstChild as HTMLElement;
+            let test=pugTabItem({name:""})
+            this.tab=utils.stringToDom(test).firstChild as HTMLElement;
             this.tab.onclick=()=>setCurrentExplorer(this)
+            this.tab.onmouseleave=(e)=>{this.tab.style.background= ""}
+            this.tab.onmousemove=(e)=>{
+                if (this!==currentExplorer)
+                    this.tab.style.background= `radial-gradient(200px at ${e.offsetX}px 50%, rgba(200, 212, 228,1) 0%, rgba(200, 212, 228,0) 100%)`
+            }
         }
         this.history.onChangeHistory=(data)=>this.gotoForHistory(data)
     }
