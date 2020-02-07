@@ -115,9 +115,12 @@ class Explorer
     }
     goto(pathFolder: string)
     {
+        if (fs.existsSync(pathFolder))
+        {
         this.currentPath=pathFolder;
         this.history.pushState({path:pathFolder, scroll: 0});
         this.update()
+    }
     }
     previous()
     {
