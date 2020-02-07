@@ -115,12 +115,14 @@ class Explorer
     }
     goto(pathFolder: string)
     {
-        if (fs.existsSync(pathFolder))
+        if (fs.existsSync(pathFolder) && this.currentPath!=pathFolder)
         {
             this.currentPath=pathFolder;
             this.history.pushState({path:pathFolder, scroll: 0});
             this.update()
+            return true;
         }
+        return false;
     }
     previous()
     {
@@ -212,7 +214,7 @@ export function getPath(): string
 }
 export function gotoFolder(currentPath: string)
 {
-    currentExplorer.goto(currentPath)
+    return currentExplorer.goto(currentPath)
 }
 export function previous()
 {

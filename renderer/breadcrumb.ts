@@ -39,12 +39,19 @@ export function update(currentPath: string)
         let inputElem=document.createElement("input")
         inputElem.setAttribute("id", "address")
         inputElem.value = explorer.getPath()
+        let undoFocusOut=false
         inputElem.addEventListener("keyup", function(event) {
             if (event.key === "Enter") {
-                explorer.gotoFolder(inputElem.value)
+                undoFocusOut=true
+                undoFocusOut=explorer.gotoFolder(inputElem.value)
+                if (!undoFocusOut)
+                    inputElem.blur()
             }
         });
-        // inputElem.addEventListener("focusout",()=>{update(explorer.getPath())})
+        inputElem.addEventListener("focusout",()=>{
+            if (!undoFocusOut)
+                update(explorer.getPath())
+        })
         nodeBC.appendChild(inputElem)
         inputElem.focus()
     }
