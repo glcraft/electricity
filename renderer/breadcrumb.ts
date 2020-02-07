@@ -33,4 +33,19 @@ export function update(currentPath: string)
         nodeBC.append(nodeBCItem)
     }
     BCFields.forEach(createBCItem)
+    let addressTap=document.getElementById("address-tap")
+    addressTap.onclick=()=>{
+        utils.clearElement(nodeBC)
+        let inputElem=document.createElement("input")
+        inputElem.setAttribute("id", "address")
+        inputElem.value = explorer.getPath()
+        inputElem.addEventListener("keyup", function(event) {
+            if (event.key === "Enter") {
+                explorer.gotoFolder(inputElem.value)
+            }
+        });
+        // inputElem.addEventListener("focusout",()=>{update(explorer.getPath())})
+        nodeBC.appendChild(inputElem)
+        inputElem.focus()
+    }
 }

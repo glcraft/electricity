@@ -117,10 +117,10 @@ class Explorer
     {
         if (fs.existsSync(pathFolder))
         {
-        this.currentPath=pathFolder;
-        this.history.pushState({path:pathFolder, scroll: 0});
-        this.update()
-    }
+            this.currentPath=pathFolder;
+            this.history.pushState({path:pathFolder, scroll: 0});
+            this.update()
+        }
     }
     previous()
     {
@@ -206,6 +206,10 @@ let explorers: Array<Explorer> = new Array<Explorer>();
 let currentExplorer:Explorer;
 let sassExplorer = document.getElementById("sass-explorer")
 
+export function getPath(): string
+{
+    return currentExplorer.getPath();
+}
 export function gotoFolder(currentPath: string)
 {
     currentExplorer.goto(currentPath)
@@ -258,8 +262,6 @@ vPaths.forEach((p)=>{
     explorers.push(exp)
     ++i
 })
-
-
 
 let navElem=document.getElementById("nav");
 ["previous", "next", "up"].forEach(element => {

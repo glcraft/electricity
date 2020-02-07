@@ -108,10 +108,11 @@ body
 }
 .breadcrumb
 {
-    margin:  0px;
+    display: contents;
+    flex:0;
     padding: 0;
-    padding: auto;
     margin:  auto 0;
+    width: 100%;
 }
 .bc-item
 {
@@ -138,6 +139,17 @@ body
     list-style: none;
     margin: 0px;
     display: flex;
+}
+#address
+{
+    border: 0px;
+    width: 100%;
+    margin: auto 0;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+}
+#address-tap
+{
+    flex:1 auto;
 }
 #nav
 {
