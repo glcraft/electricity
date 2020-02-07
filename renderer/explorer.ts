@@ -4,6 +4,7 @@ import * as pug from 'pug'
 import * as bc from './breadcrumb'
 import * as utils from './utils'
 import {extractIcon} from 'extract-icon'
+import {exec} from "child_process"
 
 // = document.getElementsByClassName("explorer")
 const tabs = document.getElementsByClassName("tab")
@@ -187,7 +188,12 @@ class Explorer
                     (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{
                         gotoFolder(currentFile.path)
                     }
-                    this.explorer.append(nodeFile)
+                if (currentFile.type=="file")
+                    (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{
+                        // spawn("start", ["", currentFile.path])
+                        exec(`start "" "${currentFile.path}"`)
+                    }
+                this.explorer.append(nodeFile)
             })
         });
     }
