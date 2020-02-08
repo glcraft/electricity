@@ -1,4 +1,5 @@
 import * as path from 'path'
+import * as fs from 'fs'
 import * as pug from 'pug'
 import * as utils from './utils'
 import * as explorer from './explorer'
@@ -40,6 +41,27 @@ export function update(currentPath: string)
         inputElem.setAttribute("id", "address")
         inputElem.value = explorer.getPath()
         let undoFocusOut=false
+        inputElem.addEventListener("keydown", function(event) {
+            if (event.key === "Tab") {
+                console.log("tab pressed")
+                if (!inputElem.value.endsWith(path.sep))
+                {
+                    let parentPath = path.dirname(inputElem.value)
+                    let toFound = path.basename(inputElem.value)
+                    fs.readdir(parentPath, (err,paths)=>{
+                        if (err)
+                            return;
+                        for(let i=0;i<paths.length;i++)
+                        if(RegExp(`^${toFound}`).exec(paths[i]))
+                        {
+                            inputElem.value=path.join(path.dirname(inputElem.value), paths[i])
+                            break;
+                        }
+                    })
+                }
+                event.preventDefault()
+            }
+        })
         inputElem.addEventListener("keyup", function(event) {
             if (event.key === "Enter") {
                 undoFocusOut=true
