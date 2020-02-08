@@ -1,10 +1,12 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import * as pug from 'pug'
-import * as bc from './breadcrumb'
-import * as utils from './utils'
+import {remote} from 'electron'
 import {extractIcon} from 'extract-icon'
 import {exec} from "child_process"
+import {MyMenu} from "./mymenu"
+import * as bc from './breadcrumb'
+import * as utils from './utils'
 
 // = document.getElementsByClassName("explorer")
 const tabs = document.getElementsByClassName("tab")
@@ -37,6 +39,7 @@ class ExplorerHistory {
     private hist : Array<HistoryData> = new Array<HistoryData>()
     private currentpos:number = -1;
     private stocksize:number = 0;
+    
 
     onChangeHistory:(d:HistoryData)=>void;
     
@@ -62,6 +65,7 @@ class ExplorerHistory {
         this.hist.length=this.currentpos
         this.hist.push(data)
     }
+    
     // replaceState(path: string): void
     // {
         
@@ -74,6 +78,7 @@ class Explorer
     private tab: HTMLElement;
     private currentPath: string;
     private history:ExplorerHistory = new ExplorerHistory();
+    private menu:MyMenu;
     
     constructor(expElem?: HTMLElement, tabElem?:HTMLElement)
     {
@@ -93,6 +98,13 @@ class Explorer
                 if (this!==currentExplorer)
                     this.tab.style.background= `radial-gradient(200px at ${e.offsetX}px 50%, rgba(200, 212, 228,1) 0%, rgba(200, 212, 228,0) 100%)`
             }
+        }
+        this.menu=new MyMenu([{title: "test", enabled:()=>false, onclick:()=>{
+            console.log("bisous")
+        }}])
+        
+        this.explorer.onauxclick=()=>{
+            this.menu.popup({ window: remote.getCurrentWindow() });
         }
         this.history.onChangeHistory=(data)=>this.gotoForHistory(data)
     }
