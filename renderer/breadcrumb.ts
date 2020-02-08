@@ -51,11 +51,41 @@ export function update(currentPath: string)
                     fs.readdir(parentPath, (err,paths)=>{
                         if (err)
                             return;
+                        let lsFounds = new Array<string>();
+                        
                         for(let i=0;i<paths.length;i++)
-                        if(RegExp(`^${toFound}`).exec(paths[i]))
+                            if(RegExp(`^${toFound}`).exec(paths[i]))
+                            {
+                                if (fs.statSync(path.join(parentPath, paths[i])).isDirectory())
+                                    lsFounds.push(paths[i])
+                            }
+                        if (lsFounds.length==1)
+                            inputElem.value=path.join(parentPath, lsFounds[0])+path.sep
+                        else if (lsFounds.length>1)
                         {
-                            inputElem.value=path.join(path.dirname(inputElem.value), paths[i])
-                            break;
+                            let stop=false;
+                            let pos=0;
+                            while(!stop)
+                            {
+                                let currentLetter=""
+                                for(let iDir=0;iDir<lsFounds.length;++iDir)
+                                {
+                                    if (pos>=lsFounds[iDir].length)
+                                    { 
+                                        stop = true; 
+                                        break; 
+                                    }
+                                    if (currentLetter=="")
+                                        currentLetter=lsFounds[iDir][pos]
+                                    else if (lsFounds[iDir][pos]!=currentLetter)
+                                    {
+                                        stop = true; 
+                                        break; 
+                                    }
+                                }
+                                ++pos
+                            }
+                            inputElem.value=path.join(parentPath, lsFounds[0].substr(0,pos-1))
                         }
                     })
                 }
