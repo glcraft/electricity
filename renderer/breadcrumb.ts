@@ -44,7 +44,8 @@ export function update(currentPath: string)
         inputElem.addEventListener("keydown", function(event) {
             if (event.key === "Tab") {
                 console.log("tab pressed")
-                if (!inputElem.value.endsWith(path.sep))
+                inputElem.value=utils.resolvePathEnvVar(inputElem.value)
+                if (!inputElem.value.endsWith(path.sep) && inputElem.value!=="")
                 {
                     let parentPath = path.dirname(inputElem.value)
                     let toFound = path.basename(inputElem.value)
@@ -95,6 +96,7 @@ export function update(currentPath: string)
         inputElem.addEventListener("keyup", function(event) {
             if (event.key === "Enter") {
                 undoFocusOut=true
+                inputElem.value=utils.resolvePathEnvVar(inputElem.value)
                 undoFocusOut=explorer.gotoFolder(inputElem.value)
                 if (!undoFocusOut)
                     inputElem.blur()

@@ -54,3 +54,26 @@ export function pugDom(pugString:string) : Node
 {
     return stringToDom(pug.render(pugString)).firstChild;
 }
+export function resolvePathEnvVar(pathToResolve:string)
+{
+    let lsFound: RegExpExecArray;
+    while(lsFound=/\$(\w+)/.exec(pathToResolve))
+    {
+        let found=searchObjectCaseIns(process.env,lsFound[1]);
+        if (found===undefined)
+            found=""
+        pathToResolve = pathToResolve.substring(0,lsFound.index)+found+pathToResolve.substr(lsFound.index+lsFound[0].length)
+    }
+    return pathToResolve;
+}
+
+export function searchObjectCaseIns(obj:Object, toSearch:string):any
+{
+    toSearch = toSearch.toLowerCase();
+    for(let p in obj){
+        if(obj.hasOwnProperty(p) && toSearch == p.toLowerCase()){
+            return obj[p];
+            break;
+        }
+    }
+}
