@@ -116,6 +116,8 @@ void openWith(const Nan::FunctionCallbackInfo<v8::Value> &args)
     Info.oaifInFlags = OAIF_EXEC;
     SHOpenWithDialog(NULL, &Info);
 }
+//SHOW PROPERTIES WINDOW
+//https://stackoverflow.com/a/33472984/6345054
 
 void Init(v8::Local<v8::Object> exports)
 {
