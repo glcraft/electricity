@@ -110,9 +110,10 @@ void openWith(const Nan::FunctionCallbackInfo<v8::Value> &args)
     MultiByteToWideChar(CP_UTF8, 0, *str, str.length(), &pathToFileW[0], pathToFileW.size());
 
     OPENASINFO Info = { 0 };
+    ZeroMemory(&Info, sizeof(OPENASINFO));
     Info.pcszFile = pathToFileW.c_str();
     Info.pcszClass = NULL;
-    Info.oaifInFlags = OAIF_ALLOW_REGISTRATION;
+    Info.oaifInFlags = OAIF_EXEC;
     SHOpenWithDialog(NULL, &Info);
 }
 
