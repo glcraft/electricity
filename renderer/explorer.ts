@@ -209,7 +209,11 @@ class Explorer
                 return [
                     {
                         title: "Ouvrir", 
-                        onclick:()=>{ openWith(filepath) }
+                        onclick:()=>{ exec(`start "" "${filepath}"`) }
+                    },
+                    {
+                        title: "Ouvrir avec...", 
+                        onclick:()=>{ openWith(path.resolve(filepath)) }
                     }
                 ];
             }
