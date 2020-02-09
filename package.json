@@ -21,7 +21,7 @@
     "@types/pug": "^2.0.4",
     "bindings": "^1.5.0",
     "electron": "^8.0.0",
-    "extract-icon": "file:./my-modules/extract-icon",
+    "internal_module": "file:./my-modules/internal_module",
     "pug": "^2.0.4",
     "subpackage": "^1.1.0",
     "uuid": "^3.4.0"

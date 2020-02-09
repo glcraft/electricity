@@ -3,6 +3,7 @@
 #include <sstream>
 #include <nan.h>
 #include <windows.h>
+#include <Shlobj.h>
 #include "lodepng.h"
 // with line number
 #define STRING2(x) #x
@@ -96,6 +97,24 @@ void getIcon(const Nan::FunctionCallbackInfo<v8::Value> &args)
 
     args.GetReturnValue().Set(Nan::New(base64_encode(pngBytes.data(), pngBytes.size())).ToLocalChecked());
 }
+void openWith(const Nan::FunctionCallbackInfo<v8::Value> &args)
+{
+    //http://www.cplusplus.com/forum/windows/57419/
+    v8::Isolate* isolate = args.GetIsolate();
+    v8::String::Utf8Value str(isolate, args[0]);
+    std::string pathToFile(*str);
+    std::wstring pathToFileW;
+    
+    int t=MultiByteToWideChar(CP_UTF8, 0, *str, str.length(), nullptr, 0);
+    pathToFileW.resize(t);
+    MultiByteToWideChar(CP_UTF8, 0, *str, str.length(), &pathToFileW[0], pathToFileW.size());
+
+    OPENASINFO Info = { 0 };
+    Info.pcszFile = pathToFileW.c_str();
+    Info.pcszClass = NULL;
+    Info.oaifInFlags = OAIF_ALLOW_REGISTRATION;
+    SHOpenWithDialog(NULL, &Info);
+}
 
 void Init(v8::Local<v8::Object> exports)
 {
@@ -105,6 +124,11 @@ void Init(v8::Local<v8::Object> exports)
                  Nan::New<v8::FunctionTemplate>(getIcon)
                      ->GetFunction(context)
                      .ToLocalChecked());
+    exports->Set(context,
+                 Nan::New("openWith").ToLocalChecked(),
+                 Nan::New<v8::FunctionTemplate>(openWith)
+                     ->GetFunction(context)
+                     .ToLocalChecked());
 }
 
-NODE_MODULE(geticon, Init)
+NODE_MODULE(internal_module, Init)

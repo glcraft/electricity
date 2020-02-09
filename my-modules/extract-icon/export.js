@@ -1,1 +1,0 @@
-module.exports.extractIcon = require("bindings")("extract-icon")

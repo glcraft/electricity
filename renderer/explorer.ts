@@ -2,7 +2,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import * as pug from 'pug'
 import {remote} from 'electron'
-import {extractIcon} from 'extract-icon'
+import {extractIcon,openWith} from 'internal_module'
 import {exec} from "child_process"
 import {MyMenu} from "./mymenu"
 import * as bc from './breadcrumb'
@@ -99,13 +99,13 @@ class Explorer
                     this.tab.style.background= `radial-gradient(200px at ${e.offsetX}px 50%, rgba(200, 212, 228,1) 0%, rgba(200, 212, 228,0) 100%)`
             }
         }
-        this.menu=new MyMenu([{title: "test", enabled:()=>false, onclick:()=>{
-            console.log("bisous")
-        }}])
+        // this.menu=new MyMenu([{title: "test", enabled:()=>false, onclick:()=>{
+        //     console.log("bisous")
+        // }}])
         
-        this.explorer.onauxclick=()=>{
-            this.menu.popup({ window: remote.getCurrentWindow() });
-        }
+        // this.explorer.onauxclick=()=>{
+        //     this.menu.popup({ window: remote.getCurrentWindow() });
+        // }
         this.history.onChangeHistory=(data)=>this.gotoForHistory(data)
     }
     getPath(): string 
@@ -184,7 +184,7 @@ class Explorer
                     }
                     else
                     {
-                        let b64Icon = extractIcon.geticon(currentFile.path)
+                        let b64Icon = extractIcon(currentFile.path)
                         currentFile.img=`data:image/png;base64,${b64Icon}`;
                         currentFile.type="file"
                     }
@@ -199,17 +199,35 @@ class Explorer
             }
             utils.stable_partition(lsFilesInfo, v=>v.type=="dir")
             utils.clearElement(this.explorer);
+            let startFile=(path)=>{
+                exec(`start "" "${path}"`)
+            }
+            let menuFolder = new MyMenu([{title: "Folder", onclick:()=>{
+                console.log("bisous")
+            }}])
+            let makeConfig=(filepath:string)=>{
+                return [
+                    {
+                        title: "Ouvrir", 
+                        onclick:()=>{ openWith(filepath) }
+                    }
+                ];
+            }
             lsFilesInfo.forEach((currentFile)=>{
                 let nodeFile = utils.stringToDom(pugExplorerItem(currentFile));
                 if (currentFile.type=="dir")
+                {
                     (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{
                         gotoFolder(currentFile.path)
                     }
+                    (nodeFile.childNodes[0] as HTMLElement).onauxclick =()=>{ menuFolder.popup() }
+                    
+                }
                 if (currentFile.type=="file")
-                    (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{
-                        // spawn("start", ["", currentFile.path])
-                        exec(`start "" "${currentFile.path}"`)
-                    }
+                {
+                    (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{ startFile(currentFile.path) };
+                    (nodeFile.childNodes[0] as HTMLElement).onauxclick =()=>{ new MyMenu(makeConfig(currentFile.path)).popup() }
+                }
                 this.explorer.append(nodeFile)
             })
         });
