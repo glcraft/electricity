@@ -230,7 +230,7 @@ class Explorer
                 if (currentFile.type=="file")
                 {
                     (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{ startFile(currentFile.path) };
-                    (nodeFile.childNodes[0] as HTMLElement).onauxclick =()=>{ new MyMenu(makeConfig(currentFile.path)).popup() }
+                    (nodeFile.childNodes[0] as HTMLElement).onauxclick = ()=>{ new MyMenu(makeConfig(currentFile.path)).popup() }
                 }
                 this.explorer.append(nodeFile)
             })
