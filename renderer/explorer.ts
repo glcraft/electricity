@@ -18,13 +18,16 @@ const urlFilePng=utils.getResourceURL("File.png")
 
 const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
 const pugTabItem = pug.compileFile(path.join(utils.renderer_path.views, "tabs", "item.pug"))
-
-class FileInfoPug
+class FileInfo
 {
     path: string;
-    type: string;
-    img: string;
+    type: "file"|"dir"|"unknown";
     name: string;
+}
+class FileInfoPug
+{
+    file: FileInfo
+    img: string;
 }
 class HistoryData
 {
@@ -79,6 +82,7 @@ class Explorer
     private currentPath: string;
     private history:ExplorerHistory = new ExplorerHistory();
     private menu:MyMenu;
+    private lsFileInfos: Array<FileInfo>;
     
     constructor(expElem?: HTMLElement, tabElem?:HTMLElement)
     {
@@ -150,7 +154,7 @@ class Explorer
         if (newPath!==this.currentPath)
             this.goto(newPath)
     }
-    public update()
+    update()
     {
         let t: Array<number>;
         this.currentPath = path.resolve(this.currentPath)
@@ -163,99 +167,118 @@ class Explorer
                 console.log(`Erreur lecture du dossier ${this.currentPath}`, err);
                 return;
             }
-            let lsFilesInfo = new Array<FileInfoPug>();
+            this.lsFileInfos = new Array<FileInfo>();
             for (let iFile = 0;iFile<files.length;++iFile)
             {
                 let value = files[iFile];
-                let currentFile:FileInfoPug = new FileInfoPug();
+                let currentFile:FileInfo = new FileInfo();
                 currentFile.path = `${this.currentPath}/${value}`
                 currentFile.name = value;
                 try {
                     let stats = fs.lstatSync(currentFile.path)
                     if (err)
                     {
-                        currentFile.img = urlFilePng
+                        // currentFile.img = urlFilePng
                         currentFile.type="unknown"
                     }
                     else if (stats.isDirectory())
                     {
-                        currentFile.img=urlFolderPng
+                        // currentFile.img=urlFolderPng
                         currentFile.type="dir"
                     }
                     else
                     {
-                        let b64Icon = extractIcon(currentFile.path)
-                        currentFile.img=`data:image/png;base64,${b64Icon}`;
+                        // let b64Icon = extractIcon(currentFile.path)
+                        // currentFile.img=`data:image/png;base64,${b64Icon}`;
                         currentFile.type="file"
                     }
                 }
                 catch (err)
                 {
-                    currentFile.img = urlFilePng
+                    // currentFile.img = urlFilePng
                     currentFile.type="unknown"
                 }
-                
-                lsFilesInfo.push(currentFile)
+                this.lsFileInfos.push(currentFile)
             }
-            utils.stable_partition(lsFilesInfo, v=>v.type=="dir")
+            utils.stable_partition(this.lsFileInfos, v=>v.type=="dir")
             utils.clearElement(this.explorer);
-            let startFile=(path)=>{
-                exec(`start "" "${path}"`)
-            }
-            let makeFolderConfig=(filepath:string)=>{
-                return [
-                    {
-                        title: "Folder", 
-                        enabled:false
-                    },
-                    {
-                        title: "Ouvrir", 
-                        onclick:()=>{ gotoFolder(filepath) }
-                    },
-                    {
-                        title: "Propriétés", 
-                        onclick:()=>{ showProperties(path.resolve(filepath)) }
-                    }
-                ];
-            }
-            let makeFileConfig=(filepath:string)=>{
-                return [
-                    {
-                        title: "Fichier",
-                        enabled:false
-                    },
-                    {
-                        title: "Ouvrir", 
-                        onclick:()=>{ exec(`start "" "${filepath}"`) }
-                    },
-                    {
-                        title: "Ouvrir avec...", 
-                        onclick:()=>{ openWith(path.resolve(filepath)) }
-                    },
-                    {
-                        title: "Propriétés", 
-                        onclick:()=>{ showProperties(path.resolve(filepath)) }
-                    }
-                ];
-            }
-            lsFilesInfo.forEach((currentFile)=>{
-                let nodeFile = utils.stringToDom(pugExplorerItem(currentFile));
-                if (currentFile.type=="dir")
-                {
-                    (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{
-                        gotoFolder(currentFile.path)
-                    }
-                    (nodeFile.childNodes[0] as HTMLElement).onauxclick =()=>{ new MyMenu(makeFolderConfig(currentFile.path)).popup() }
-                    
-                }
-                if (currentFile.type=="file")
-                {
-                    (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{ startFile(currentFile.path) };
-                    (nodeFile.childNodes[0] as HTMLElement).onauxclick =()=>{ new MyMenu(makeFileConfig(currentFile.path)).popup() }
-                }
-                this.explorer.append(nodeFile)
-            })
+            this.updateExplorerElements();
         });
+    }
+    protected updateExplorerElements()
+    {
+        let startFile=(path)=>{
+            exec(`start "" "${path}"`)
+        }
+        let makeFolderConfig=(fileinfo:FileInfo)=>{
+            return [
+                {
+                    title: "Folder", 
+                    enabled:false
+                },
+                {
+                    title: "Ouvrir", 
+                    onclick:()=>{ gotoFolder(fileinfo.path) }
+                },
+                {
+                    title: "Propriétés", 
+                    onclick:()=>{ showProperties(path.resolve(fileinfo.path)) }
+                }
+            ];
+        }
+        let makeFileConfig=(fileinfo:FileInfo)=>{
+            return [
+                {
+                    title: "Fichier",
+                    enabled:false
+                },
+                {
+                    title: "Ouvrir", 
+                    onclick:()=>{ exec(`start "" "${fileinfo.path}"`) }
+                },
+                {
+                    title: "Ouvrir avec...", 
+                    onclick:()=>{ openWith(path.resolve(fileinfo.path)) }
+                },
+                {
+                    title: "Propriétés", 
+                    onclick:()=>{ showProperties(path.resolve(fileinfo.path)) }
+                }
+            ];
+        }
+        this.lsFileInfos.forEach((currentFile)=>{
+            let img:string;
+            if (currentFile.type=="dir")
+                img = urlFolderPng;
+            else if (currentFile.type=="file")
+            {
+                let b64Icon = extractIcon(currentFile.path)
+                img =`data:image/png;base64,${b64Icon}`;
+            }
+            else 
+                img = urlFilePng;
+            
+            let nodeFile = utils.stringToDom(pugExplorerItem({file:currentFile, img: img}));
+            if (currentFile.type=="dir")
+            {
+                (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{
+                    gotoFolder(currentFile.path)
+                }
+                (nodeFile.childNodes[0] as HTMLElement).onauxclick =(e)=>{ 
+                    if (e.button==2)
+                        new MyMenu(makeFolderConfig(currentFile)).popup() 
+                }
+            }
+            if (currentFile.type=="file")
+            {
+                (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{ startFile(currentFile.path) };
+                (nodeFile.childNodes[0] as HTMLElement).onauxclick = (e)=>{ 
+                    if (e.button==2)
+                        new MyMenu(makeFileConfig(currentFile)).popup()
+                }
+            }
+            this.explorer.append(nodeFile)
+        })
     }
 }
 
