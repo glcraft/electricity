@@ -6,7 +6,7 @@ interface MyMenuItem
      * If not defined, is separator
      */
     title?: string;
-    onclick: (menuItem?:MenuItem, browserWindow?:BrowserWindow, event?:KeyboardEvent)=>void;
+    onclick?: (menuItem?:MenuItem, browserWindow?:BrowserWindow, event?:KeyboardEvent)=>void;
     /**
      * Path to an icon
      */
