@@ -128,6 +128,23 @@ void openWith(const Nan::FunctionCallbackInfo<v8::Value> &args)
 //SHOW PROPERTIES WINDOW
 //https://stackoverflow.com/a/33472984/6345054
 
+void showProperties(const Nan::FunctionCallbackInfo<v8::Value> &args)
+{
+    v8::Isolate* isolate = args.GetIsolate();
+    v8::String::Utf8Value str(isolate, args[0]);
+    std::wstring pathToFileW=utf8ToWstr(str);
+
+    SHELLEXECUTEINFOW info = {0};
+
+    info.cbSize = sizeof(info);
+    info.lpFile = pathToFileW.c_str();
+    info.nShow = SW_SHOW;
+    info.fMask = SEE_MASK_INVOKEIDLIST;
+    info.lpVerb = L"properties";
+
+    ShellExecuteExW(&info);
+}
+
 void Init(v8::Local<v8::Object> exports)
 {
     v8::Local<v8::Context> context = exports->CreationContext();
@@ -139,6 +156,11 @@ void Init(v8::Local<v8::Object> exports)
     exports->Set(context,
                  Nan::New("openWith").ToLocalChecked(),
                  Nan::New<v8::FunctionTemplate>(openWith)
+                     ->GetFunction(context)
+                     .ToLocalChecked());
+    exports->Set(context,
+                 Nan::New("showProperties").ToLocalChecked(),
+                 Nan::New<v8::FunctionTemplate>(showProperties)
                      ->GetFunction(context)
                      .ToLocalChecked());
 }

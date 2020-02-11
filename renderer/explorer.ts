@@ -2,7 +2,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import * as pug from 'pug'
 import {remote} from 'electron'
-import {extractIcon,openWith} from 'internal_module'
+import {extractIcon,openWith, showProperties} from 'internal_module'
 import {exec} from "child_process"
 import {MyMenu} from "./mymenu"
 import * as bc from './breadcrumb'
@@ -202,11 +202,28 @@ class Explorer
             let startFile=(path)=>{
                 exec(`start "" "${path}"`)
             }
-            let menuFolder = new MyMenu([{title: "Folder", onclick:()=>{
-                console.log("bisous")
-            }}])
-            let makeConfig=(filepath:string)=>{
+            let makeFolderConfig=(filepath:string)=>{
                 return [
+                    {
+                        title: "Folder", 
+                        enabled:false
+                    },
+                    {
+                        title: "Ouvrir", 
+                        onclick:()=>{ gotoFolder(filepath) }
+                    },
+                    {
+                        title: "Propriétés", 
+                        onclick:()=>{ showProperties(path.resolve(filepath)) }
+                    }
+                ];
+            }
+            let makeFileConfig=(filepath:string)=>{
+                return [
+                    {
+                        title: "Fichier",
+                        enabled:false
+                    },
                     {
                         title: "Ouvrir", 
                         onclick:()=>{ exec(`start "" "${filepath}"`) }
@@ -214,6 +231,10 @@ class Explorer
                     {
                         title: "Ouvrir avec...", 
                         onclick:()=>{ openWith(path.resolve(filepath)) }
+                    },
+                    {
+                        title: "Propriétés", 
+                        onclick:()=>{ showProperties(path.resolve(filepath)) }
                     }
                 ];
             }
@@ -224,13 +245,13 @@ class Explorer
                     (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{
                         gotoFolder(currentFile.path)
                     }
-                    (nodeFile.childNodes[0] as HTMLElement).onauxclick =()=>{ menuFolder.popup() }
+                    (nodeFile.childNodes[0] as HTMLElement).onauxclick =()=>{ new MyMenu(makeFolderConfig(currentFile.path)).popup() }
                     
                 }
                 if (currentFile.type=="file")
                 {
                     (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{ startFile(currentFile.path) };
-                    (nodeFile.childNodes[0] as HTMLElement).onauxclick =()=>{ new MyMenu(makeConfig(currentFile.path)).popup() }
+                    (nodeFile.childNodes[0] as HTMLElement).onauxclick =()=>{ new MyMenu(makeFileConfig(currentFile.path)).popup() }
                 }
                 this.explorer.append(nodeFile)
             })
