@@ -57,17 +57,31 @@ std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_
     return ret.str();
 
 }
+std::wstring utf8ToWstr(const char* str_data, size_t str_length)
+{
+    std::wstring wstr;
+    int t=MultiByteToWideChar(CP_UTF8, 0, str_data, str_length, nullptr, 0);
+    wstr.resize(t);
+    MultiByteToWideChar(CP_UTF8, 0, str_data, str_length, &wstr[0], wstr.size());
+    return wstr;
+}
 
+inline std::wstring utf8ToWstr(const v8::String::Utf8Value& str)
+{
+    return utf8ToWstr(*str, str.length());
+}
+inline std::wstring utf8ToWstr(const std::string& str)
+{
+    return utf8ToWstr(str.data(), str.length());
+}
 
 void getIcon(const Nan::FunctionCallbackInfo<v8::Value> &args)
 {
     v8::Isolate* isolate = args.GetIsolate();
     v8::String::Utf8Value str(isolate, args[0]);
-    std::string s(*str);
-    SHFILEINFOW info;
+    std::wstring ws=utf8ToWstr(str);
 
-    std::wstring ws(s.size(), L' '); // Overestimate number of code points.
-    ws.resize(std::mbstowcs(&ws[0], s.c_str(), s.size())); // Shrink to fit.
+    SHFILEINFOW info;
     SHGetFileInfoW(ws.c_str(), FILE_ATTRIBUTE_NORMAL, &info, sizeof(info),
         SHGFI_ICON | SHGFI_USEFILEATTRIBUTES | SHGFI_LARGEICON);
     ICONINFO stIconInfo;
@@ -102,12 +116,7 @@ void openWith(const Nan::FunctionCallbackInfo<v8::Value> &args)
     //http://www.cplusplus.com/forum/windows/57419/
     v8::Isolate* isolate = args.GetIsolate();
     v8::String::Utf8Value str(isolate, args[0]);
-    std::string pathToFile(*str);
-    std::wstring pathToFileW;
-    
-    int t=MultiByteToWideChar(CP_UTF8, 0, *str, str.length(), nullptr, 0);
-    pathToFileW.resize(t);
-    MultiByteToWideChar(CP_UTF8, 0, *str, str.length(), &pathToFileW[0], pathToFileW.size());
+    std::wstring pathToFileW=utf8ToWstr(str);
 
     OPENASINFO Info = { 0 };
     ZeroMemory(&Info, sizeof(OPENASINFO));
@@ -123,7 +132,7 @@ void Init(v8::Local<v8::Object> exports)
 {
     v8::Local<v8::Context> context = exports->CreationContext();
     exports->Set(context,
-                 Nan::New("geticon").ToLocalChecked(),
+                 Nan::New("extractIcon").ToLocalChecked(),
                  Nan::New<v8::FunctionTemplate>(getIcon)
                      ->GetFunction(context)
                      .ToLocalChecked());
