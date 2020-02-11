@@ -12,8 +12,8 @@ interface MyMenuItem
      */
     icon?: string;
 
-    visible?: ()=>boolean;
-    enabled?: ()=>boolean;
+    visible?: boolean | (()=>boolean);
+    enabled?: boolean | (()=>boolean);
     submenus?: Array<MyMenuItem>;
 }
 
@@ -52,8 +52,8 @@ export class MyMenu
                     label: item.title,
                     click: item.onclick,
                     icon:item.icon,
-                    visible:item.visible?item.visible():true,
-                    enabled:item.enabled?item.enabled():true
+                    visible:item.visible!==undefined?(typeof item.visible=="boolean"?item.visible:item.visible()):true,
+                    enabled:item.enabled!==undefined?(typeof item.enabled=="boolean"?item.enabled:item.enabled()):true
                 });
             }
             menu.append(menuitem)
