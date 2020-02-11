@@ -1,2 +1,1 @@
-module.exports.extractIcon = require("bindings")("internal_module").geticon
-module.exports.openWith = require("bindings")("internal_module").openWith
+module.exports = require("bindings")("internal_module")
