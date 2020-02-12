@@ -251,14 +251,23 @@ class Explorer
             
             let nodeFile = utils.stringToDom(pugExplorerItem({file:currentFile, img: img}));
             let elemFile = (nodeFile.childNodes[0] as HTMLElement)
-            if (currentFile.type=="dir")
-            {
-                elemFile.ondblclick = ()=>{ gotoFolder(currentFile.path) }
-            }
-            if (currentFile.type=="file")
-            {
-                elemFile.ondblclick = ()=>{ startFile(currentFile.path) };
-            }
+            elemFile.ondblclick = ()=>{
+                switch (currentFile.type) {
+                    case "dir":
+                        gotoFolder(currentFile.path)
+                        break;
+                    case "file":
+                        startFile(currentFile.path)
+                        break;
+                    default:
+                        remote.dialog.showMessageBoxSync({ 
+                            type: "error", 
+                            message: "Ce type de fichier n'est pas reconnu.", 
+                            title: "Type de fichier inconnu" 
+                        });
+                        break;
+                }
+            };
             elemFile.onclick = (e) => {
                 if (e.ctrlKey==true)
                 {
