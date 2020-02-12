@@ -91,17 +91,7 @@ class Explorer
         if (tabElem)
             this.tab=tabElem
         else
-        {
-            let test=pugTabItem({name:""})
-            this.tab=utils.stringToDom(test).firstChild as HTMLElement;
-            this.tab.onclick=()=>setCurrentExplorer(this)
-            this.tab.onmouseleave=(e)=>{this.tab.style.background= ""}
-            this.tab.onmousemove=(e)=>{
-                if (this!==currentExplorer)
-                    this.tab.style.background= `radial-gradient(200px at ${e.offsetX}px 50%, var(--col-hovered) 0%, rgba(0,0,0,0) 100%)`
-            }
-            tabsBar.appendChild(this.tab)
-        }
+            this.tab = addTab(this)
         this.history.onChangeHistory=(data)=>this.gotoForHistory(data)
     }
     getPath(): string 
@@ -193,10 +183,14 @@ class Explorer
                 {
                     title: "Folder", 
                     enabled:false
-                },
+                },,
                 {
                     title: "Ouvrir", 
                     onclick:()=>{ gotoFolder(fileinfo.path) }
+                },
+                {
+                    title: "Ouvrir dans un nouvel onglet", 
+                    onclick:()=>{ addExplorer(fileinfo.path, true) }
                 },
                 {
                     title: "Propriétés", 
@@ -333,7 +327,53 @@ export function setCurrentExplorer(exp: Explorer|number)
     sassExplorer.appendChild(currentExplorer.getExplorerElement())
     currentExplorer.update()
 }
-
+function addExplorer(path: string, beCurrent=false) : Explorer
+{
+    let exp = new Explorer()
+    exp.goto(path)
+    explorers.push(exp)
+    if (beCurrent)
+        setCurrentExplorer(exp);
+    return exp
+}
+function removeExplorer(exp: Explorer|number)
+{
+    if (typeof exp === "number")
+        exp=explorers[exp]
+    let id = explorers.findIndex(e=>e===exp)
+    explorers.splice(id, 1)
+    removeTab(exp)
+    if (explorers.length==0)
+        remote.getCurrentWindow().close()
+    if (exp===currentExplorer)
+    {
+        if (id===0)
+            setCurrentExplorer(0)
+        else
+        setCurrentExplorer(id-1)
+    }
+}
+function addTab(exp: Explorer): HTMLElement
+{
+    let test=pugTabItem({name:""})
+    let tab: HTMLElement = utils.stringToDom(test).firstChild as HTMLElement;
+    tab.onclick=(e)=>setCurrentExplorer(exp)
+    tab.onauxclick=(e)=>{
+        if (e.button==1)
+            removeExplorer(exp);
+    }
+    tab.onmouseleave=(e)=>{tab.style.background= ""}
+    tab.onmousemove=(e)=>{
+        if (exp!==currentExplorer)
+            tab.style.background= `radial-gradient(200px at ${e.offsetX}px 50%, var(--col-hovered) 0%, rgba(0,0,0,0) 100%)`
+    }
+    tabsBar.appendChild(tab)
+    return tab;
+}
+function removeTab(exp: Explorer)
+{
+    tabsBar.removeChild(exp.getTabElement())
+}
 //INITIAL
 let vPaths:Array<string>;
 if (process.platform==="win32")
@@ -346,13 +386,7 @@ if (process.platform==="win32")
 }
 let i=0;
 
-vPaths.forEach((p)=>{
-    
-    let exp = new Explorer()
-    exp.goto(p)
-    explorers.push(exp)
-    ++i
-})
+vPaths.forEach((p)=>addExplorer(p))
 
 let navElem=document.getElementById("nav");
 ["previous", "next", "up"].forEach(element => {
