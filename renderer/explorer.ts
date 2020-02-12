@@ -8,11 +8,6 @@ import {MyMenu} from "./mymenu"
 import * as bc from './breadcrumb'
 import * as utils from './utils'
 
-// = document.getElementsByClassName("explorer")
-const tabs = document.getElementsByClassName("tab")
-// let currentExplorer = explorers[0]
-let currentTabs = tabs[0]
-
 const urlFolderPng=utils.getResourceURL("Folder.png")
 const urlFilePng=utils.getResourceURL("File.png")
 
