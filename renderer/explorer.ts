@@ -83,6 +83,7 @@ class Explorer
     private history:ExplorerHistory = new ExplorerHistory();
     private menu:MyMenu;
     private lsFileInfos: Array<FileInfo>;
+    private lsFileSelected: Array<FileInfo>;
     
     constructor(expElem?: HTMLElement, tabElem?:HTMLElement)
     {
@@ -103,13 +104,6 @@ class Explorer
                     this.tab.style.background= `radial-gradient(200px at ${e.offsetX}px 50%, var(--col-hovered) 0%, rgba(0,0,0,0) 100%)`
             }
         }
-        // this.menu=new MyMenu([{title: "test", enabled:()=>false, onclick:()=>{
-        //     console.log("bisous")
-        // }}])
-        
-        // this.explorer.onauxclick=()=>{
-        //     this.menu.popup({ window: remote.getCurrentWindow() });
-        // }
         this.history.onChangeHistory=(data)=>this.gotoForHistory(data)
     }
     getPath(): string 
@@ -177,25 +171,14 @@ class Explorer
                 try {
                     let stats = fs.lstatSync(currentFile.path)
                     if (err)
-                    {
-                        // currentFile.img = urlFilePng
                         currentFile.type="unknown"
-                    }
                     else if (stats.isDirectory())
-                    {
-                        // currentFile.img=urlFolderPng
                         currentFile.type="dir"
-                    }
                     else
-                    {
-                        // let b64Icon = extractIcon(currentFile.path)
-                        // currentFile.img=`data:image/png;base64,${b64Icon}`;
                         currentFile.type="file"
-                    }
                 }
                 catch (err)
                 {
-                    // currentFile.img = urlFilePng
                     currentFile.type="unknown"
                 }
                 this.lsFileInfos.push(currentFile)
@@ -205,11 +188,8 @@ class Explorer
             this.updateExplorerElements();
         });
     }
-    protected updateExplorerElements()
+    static createMenuItem(fileinfo:FileInfo)
     {
-        let startFile=(path)=>{
-            exec(`start "" "${path}"`)
-        }
         let makeFolderConfig=(fileinfo:FileInfo)=>{
             return [
                 {
@@ -246,6 +226,17 @@ class Explorer
                 }
             ];
         }
+        if (fileinfo.type=="dir")
+            return makeFolderConfig(fileinfo);
+        else if (fileinfo.type=="file")
+            return makeFileConfig(fileinfo);
+    }
+    protected updateExplorerElements()
+    {
+        let startFile=(path)=>{
+            exec(`start "" "${path}"`)
+        }
+        
         this.lsFileInfos.forEach((currentFile)=>{
             let img:string;
             if (currentFile.type=="dir")
@@ -259,23 +250,38 @@ class Explorer
                 img = urlFilePng;
             
             let nodeFile = utils.stringToDom(pugExplorerItem({file:currentFile, img: img}));
+            let elemFile = (nodeFile.childNodes[0] as HTMLElement)
             if (currentFile.type=="dir")
             {
-                (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{
-                    gotoFolder(currentFile.path)
-                }
-                (nodeFile.childNodes[0] as HTMLElement).onauxclick =(e)=>{ 
-                    if (e.button==2)
-                        new MyMenu(makeFolderConfig(currentFile)).popup() 
-                }
+                elemFile.ondblclick = ()=>{ gotoFolder(currentFile.path) }
             }
             if (currentFile.type=="file")
             {
-                (nodeFile.childNodes[0] as HTMLElement).ondblclick = ()=>{ startFile(currentFile.path) };
-                (nodeFile.childNodes[0] as HTMLElement).onauxclick = (e)=>{ 
-                    if (e.button==2)
-                        new MyMenu(makeFileConfig(currentFile)).popup()
+                elemFile.ondblclick = ()=>{ startFile(currentFile.path) };
+            }
+            elemFile.onclick = (e) => {
+                if (e.ctrlKey==true)
+                {
+                    let t = this.lsFileSelected.findIndex(value=>value===currentFile)
+                    if (t>0)
+                        this.lsFileSelected.splice(t, 1)
+                    else
+                        this.lsFileSelected.push(currentFile)
+                    elemFile.classList.toggle("selected")
                 }
+                else 
+                {
+                    document.querySelectorAll(".explorer-item.selected").forEach((elem)=>{
+                        elem.classList.remove("selected")
+                    })
+                    elemFile.classList.add("selected")
+                    this.lsFileSelected = [currentFile]
+                }
+                
+            }
+            elemFile.onauxclick =(e)=>{ 
+                if (e.button==2)
+                    new MyMenu(Explorer.createMenuItem(currentFile)).popup() 
             }
             this.explorer.append(nodeFile)
         })
