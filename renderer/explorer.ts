@@ -13,6 +13,8 @@ const urlFilePng=utils.getResourceURL("File.png")
 
 const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
 const pugTabItem = pug.compileFile(path.join(utils.renderer_path.views, "tabs", "item.pug"))
+let tabsBar=document.getElementById("tab-bar")
+
 class FileInfo
 {
     path: string;
@@ -98,6 +100,7 @@ class Explorer
                 if (this!==currentExplorer)
                     this.tab.style.background= `radial-gradient(200px at ${e.offsetX}px 50%, var(--col-hovered) 0%, rgba(0,0,0,0) 100%)`
             }
+            tabsBar.appendChild(this.tab)
         }
         this.history.onChangeHistory=(data)=>this.gotoForHistory(data)
     }
@@ -342,12 +345,10 @@ if (process.platform==="win32")
     ]
 }
 let i=0;
-let tabsBar=document.getElementById("tab-bar")
+
 vPaths.forEach((p)=>{
     
     let exp = new Explorer()
-    exp.getTabElement().innerText = utils.getFolderName(p)
-    tabsBar.appendChild(exp.getTabElement())
     exp.goto(p)
     explorers.push(exp)
     ++i
