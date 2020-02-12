@@ -100,7 +100,7 @@ class Explorer
             this.tab.onmouseleave=(e)=>{this.tab.style.background= ""}
             this.tab.onmousemove=(e)=>{
                 if (this!==currentExplorer)
-                    this.tab.style.background= `radial-gradient(200px at ${e.offsetX}px 50%, rgba(200, 212, 228,1) 0%, rgba(200, 212, 228,0) 100%)`
+                    this.tab.style.background= `radial-gradient(200px at ${e.offsetX}px 50%, var(--col-hovered) 0%, rgba(0,0,0,0) 100%)`
             }
         }
         // this.menu=new MyMenu([{title: "test", enabled:()=>false, onclick:()=>{

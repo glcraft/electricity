@@ -1,24 +1,29 @@
+:root {
+    --col-background: white;
+    --col-hovered: rgb(200, 212, 228);
+    --col-border-hovered: rgb(146, 176, 218);
+    --col-selected: rgb(173, 198, 245);
+    --col-border-selected: rgb(97, 152, 255);
+}
 .tab 
 {
-    background-color: white;
+    background-color: var(--col-background);
     border-color: black;
 }
-.selected
-{
-    background-color: cadetblue;
-}
+
 body
 {
-    font-family: Segoe UI, Arial, Helvetica, sans-serif;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     margin: 0px;
-    background-color: white;
+    background-color: var(--col-background);
     display: flex;
     flex-flow: column;
     height: 100vh;
 }
 #tab-bar 
 {
-    background-color: white;
+    background-color: var(--col-background);
     width: 100%;
     display: flex;
 }
@@ -30,6 +35,7 @@ body
     width: 200px;
     text-align: center;
 
+    border: 1px solid rgba(255, 255, 255, 0);
     border-top: 3px solid rgba(0, 0, 0, 0.5);
     border-right: 0.5px solid rgba(0, 0, 0, 0.5);
     border-radius: 3px 3px 0px 0px;
@@ -43,6 +49,12 @@ body
     
     /* background-position-x: -10px; */
 }
+.tab.selected
+{
+    /* border: 1px solid var(--col-border-selected); */
+
+    /* background-color: var(--col-selected); */
+}
 .tab-background
 {
     transition: ease 1s;
@@ -52,10 +64,6 @@ body
 {
     transition: ease 1s;
     opacity: 1;
-}
-.tab.selected
-{
-    background-color: rgb(173, 198, 245);
 }
 #sass-explorer
 {
@@ -103,8 +111,8 @@ body
 }
 .explorer-hoverable:hover
 {
-    background-color: rgb(200, 212, 228);
-    border: 1px solid rgb(146, 176, 218); 
+    background-color: var(--col-hovered);
+    border: 1px solid var(--col-border-hovered); 
 }
 .breadcrumb
 {
@@ -122,11 +130,13 @@ body
     padding-right: 0.2em;
     user-select: none; 
     cursor: pointer;
+    border: 1px solid rgba(255, 255, 255, 0); 
 }
 .bc-item:hover
 {
     display: inline;
-    background-color: rgb(200, 212, 228);
+    background-color: var(--col-hovered);
+    border: 1px solid var(--col-border-hovered); 
 }
 .bc-sep
 {
@@ -164,4 +174,10 @@ body
 #nav > img:hover
 {
     filter: invert(64%) sepia(64%) saturate(120%) hue-rotate(175deg) brightness(160%) contrast(84%);
+}
+
+.selected
+{
+    border-color: var(--col-border-selected);
+    background-color: var(--col-selected);
 }
