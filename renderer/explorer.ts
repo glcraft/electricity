@@ -20,6 +20,7 @@ class FileInfo
     path: string;
     type: "file"|"dir"|"unknown";
     name: string;
+    stat: fs.Stats;
 }
 class FileInfoPug
 {
@@ -157,10 +158,10 @@ class Explorer
                 currentFile.path = `${this.currentPath}/${value}`
                 currentFile.name = value;
                 try {
-                    let stats = fs.lstatSync(currentFile.path)
+                    currentFile.stat = fs.lstatSync(currentFile.path, {bigint: true})
                     if (err)
                         currentFile.type="unknown"
-                    else if (stats.isDirectory())
+                    else if (currentFile.stat.isDirectory())
                         currentFile.type="dir"
                     else
                         currentFile.type="file"
