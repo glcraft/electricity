@@ -147,7 +147,7 @@ class Explorer
         fs.readdir(this.currentPath,(err, files)=>{
             if (err)
             {
-                console.log(`Erreur lecture du dossier ${this.currentPath}`, err);
+                console.error(`Erreur lecture du dossier ${this.currentPath}`, err);
                 return;
             }
             this.lsFileInfos = new Array<FileInfo>();
