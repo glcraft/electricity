@@ -145,6 +145,29 @@ void showProperties(const Nan::FunctionCallbackInfo<v8::Value> &args)
     ShellExecuteExW(&info);
 }
 
+void fileOperation(const Nan::FunctionCallbackInfo<v8::Value> &args)
+{
+    // using namespace v8;
+    // Isolate* isolate = args.GetIsolate();
+    // String::Utf8Value type(isolate, args[0]);
+    // Local<Context> context = isolate->GetCurrentContext();
+    // Local<Object> obj = args[1]->ToObject(context).ToLocalChecked();
+    
+    // SHFILEOPSTRUCTW fileOp = {0};
+    // if (type=="copy")
+    // {
+    //     std::wstring 
+    //         from=utf8ToWstr(String::Utf8Value(obj.Get("from"))), 
+    //         to=utf8ToWstr(String::Utf8Value(obj.Get("to")));
+    //     fileOp.wFunc = FO_COPY;
+    //     fileOp.pFrom = from.c_str();
+    //     fileOp.pTo = to.c_str();
+    //     fileOp.fFlags = 
+    // }
+    // std::wstring obj.
+    
+    // std::wstring pathToFileW=utf8ToWstr(str);
+}
 void Init(v8::Local<v8::Object> exports)
 {
     v8::Local<v8::Context> context = exports->CreationContext();
@@ -161,6 +184,11 @@ void Init(v8::Local<v8::Object> exports)
     exports->Set(context,
                  Nan::New("showProperties").ToLocalChecked(),
                  Nan::New<v8::FunctionTemplate>(showProperties)
+                     ->GetFunction(context)
+                     .ToLocalChecked());
+    exports->Set(context,
+                 Nan::New("fileOperation").ToLocalChecked(),
+                 Nan::New<v8::FunctionTemplate>(fileOperation)
                      ->GetFunction(context)
                      .ToLocalChecked());
 }
