@@ -328,6 +328,21 @@ export function setCurrentExplorer(exp: Explorer|number)
     sassExplorer.appendChild(currentExplorer.getExplorerElement())
     currentExplorer.update()
 }
+function addWindow(paths: string | string[])
+{
+    let newWindow = new remote.BrowserWindow({ 
+        width: 1920/4*3, 
+        height: 1080/4*3,
+        show: true,
+        webPreferences: {
+            nodeIntegration: true
+        }
+    })
+    let pathToIndex = path.join(utils.renderer_path.views, "index.html")
+    if (typeof paths === "string")
+        paths = [ paths ]
+    newWindow.loadFile(pathToIndex, {query:{data: JSON.stringify({paths: paths})} })
+}
 function addExplorer(path: string, beCurrent=false) : Explorer
 {
     let exp = new Explorer()
@@ -377,19 +392,7 @@ function addTab(exp: Explorer): HTMLElement
                 {
                     title: "Ouvrir dans une nouvelle fenêtre", 
                     onclick:()=>{ 
-                        let newWindow = new remote.BrowserWindow({ 
-                            width: 1920/4*3, 
-                            height: 1080/4*3,
-                            show: true,
-                            webPreferences: {
-                                nodeIntegration: true
-                            }
-                        })
-                        let pathToIndex = path.join(utils.renderer_path.views, "index.html")
-                        newWindow.loadFile(pathToIndex, {query:{data: JSON.stringify({paths: [exp.getPath()]})} })
-                        newWindow.once('ready-to-show', () => {
-                            newWindow.show()
-                        })
+                        addWindow(exp.getPath())
                      }
                 }
             ]).popup();
