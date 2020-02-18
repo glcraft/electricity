@@ -194,6 +194,10 @@ class Explorer
                     onclick:()=>{ addExplorer(fileinfo.path, true) }
                 },
                 {
+                    title: "Ouvrir dans une nouvelle fenêtre", 
+                    onclick:()=>{ addWindow(fileinfo.path) }
+                },
+                {
                     title: "Propriétés", 
                     onclick:()=>{ showProperties(path.resolve(fileinfo.path)) }
                 }
@@ -393,7 +397,7 @@ function addTab(exp: Explorer): HTMLElement
                     title: "Ouvrir dans une nouvelle fenêtre", 
                     onclick:()=>{ 
                         addWindow(exp.getPath())
-                     }
+                    }
                 }
             ]).popup();
         }
