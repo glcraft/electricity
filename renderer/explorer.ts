@@ -159,9 +159,7 @@ class Explorer
                 currentFile.name = value;
                 try {
                     currentFile.stat = fs.lstatSync(currentFile.path, {bigint: true})
-                    if (err)
-                        currentFile.type="unknown"
-                    else if (currentFile.stat.isDirectory())
+                    if (currentFile.stat.isDirectory())
                         currentFile.type="dir"
                     else
                         currentFile.type="file"
