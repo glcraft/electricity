@@ -4,8 +4,8 @@
 ## Fonctionnement de base
 * [ ] Entete
 * [ ] Pied
+  * [ ] Nombres d'éléments
   * [ ] Taches courrante 
-    * [ ] Nombres d'éléments
     * [ ] Copier/Coller
 * [ ] Fonctions usuelles
   * [ ] Copier/Couper/Coller
