@@ -13,6 +13,8 @@
   * [ ] Copier le chemin d'accès
     * [ ] Paramétrage : quoted comme windows ou non
   * [ ] Supprimer
+    * [ ] Dans la corbeille
+    * [ ] Définitivement
   * [ ] Nouveau fichier
     * [ ] Modèles
 * [ ] Liste dossier dans fleche breadcrumb
