@@ -1,4 +1,5 @@
 import * as path from 'path'
+import * as querystring from 'querystring'
 import * as fs from 'fs'
 import * as pug from 'pug'
 import {remote} from 'electron'
@@ -193,7 +194,7 @@ class Explorer
                     onclick:()=>{ addExplorer(fileinfo.path, true) }
                 },
                 {
-                    title: "PropriÃ©tÃ©s", 
+                    title: "Propriétés", 
                     onclick:()=>{ showProperties(path.resolve(fileinfo.path)) }
                 }
             ];
@@ -213,7 +214,7 @@ class Explorer
                     onclick:()=>{ openWith(path.resolve(fileinfo.path)) }
                 },
                 {
-                    title: "PropriÃ©tÃ©s", 
+                    title: "Propriétés", 
                     onclick:()=>{ showProperties(path.resolve(fileinfo.path)) }
                 }
             ];
@@ -373,6 +374,24 @@ function addTab(exp: Explorer): HTMLElement
                     title: "Dupliquer", 
                     onclick:()=>{ addExplorer(exp.getPath(), true) }
                 },
+                {
+                    title: "Ouvrir dans une nouvelle fenêtre", 
+                    onclick:()=>{ 
+                        let newWindow = new remote.BrowserWindow({ 
+                            width: 1920/4*3, 
+                            height: 1080/4*3,
+                            show: true,
+                            webPreferences: {
+                                nodeIntegration: true
+                            }
+                        })
+                        let pathToIndex = path.join(utils.renderer_path.views, "index.html")
+                        newWindow.loadFile(pathToIndex, {query:{data: JSON.stringify({paths: [exp.getPath()]})} })
+                        newWindow.once('ready-to-show', () => {
+                            newWindow.show()
+                        })
+                     }
+                }
             ]).popup();
         }
     }
@@ -389,20 +408,12 @@ function removeTab(exp: Explorer)
     tabsBar.removeChild(exp.getTabElement())
 }
 //INITIAL
-let vPaths:Array<string>;
-if (process.platform==="win32")
-{
-    vPaths=[
-        process.cwd(),
-        process.env.SystemDrive+path.sep,
-        process.env.HOMEDRIVE+process.env.HOMEPATH
-    ]
-}
-let i=0;
-
-vPaths.forEach((p)=>addExplorer(p))
-
+let query = querystring.parse((global as any).location.search)
+let data = JSON.parse(query['?data'] as string)
+if (data.paths)
+    data.paths.forEach((p)=>addExplorer(p))
 let navElem=document.getElementById("nav");
+
 ["previous", "next", "up"].forEach(element => {
     let urlimg = utils.getResourceURL(`nav/${element}.png`)
     let nodeNavBut = utils.pugDom(`img(src="${urlimg}")`) as HTMLElement

@@ -27,5 +27,11 @@ function initVars()
 app.on('ready', async () => {
     initVars();
     let pathToIndex = path.join(appPaths.views,`index.html`);
-    mainWindow.loadFile(pathToIndex)
+    let paths = [
+        process.cwd(),
+        process.env.SystemDrive+path.sep,
+        process.env.HOMEDRIVE+process.env.HOMEPATH
+    ];
+    
+    mainWindow.loadFile(pathToIndex, {query:{data: JSON.stringify({paths: paths})} })
 })
