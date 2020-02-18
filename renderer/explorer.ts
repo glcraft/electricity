@@ -1,4 +1,5 @@
 import * as path from 'path'
+import * as querystring from 'querystring'
 import * as fs from 'fs'
 import * as pug from 'pug'
 import {remote} from 'electron'
@@ -193,6 +194,10 @@ class Explorer
                     onclick:()=>{ addExplorer(fileinfo.path, true) }
                 },
                 {
+                    title: "Ouvrir dans une nouvelle fenêtre", 
+                    onclick:()=>{ addWindow(fileinfo.path) }
+                },
+                {
                     title: "Propriétés", 
                     onclick:()=>{ showProperties(path.resolve(fileinfo.path)) }
                 }
@@ -328,6 +333,24 @@ export function setCurrentExplorer(exp: Explorer|number)
     sassExplorer.appendChild(currentExplorer.getExplorerElement())
     currentExplorer.update()
 }
+function addWindow(paths: string | string[])
+{
+    let currentBound = remote.getCurrentWindow().getBounds();
+    let newWindow = new remote.BrowserWindow({ 
+        width: currentBound.width, 
+        height: currentBound.height, 
+        x: currentBound.x+32, 
+        y: currentBound.y+32, 
+        show: true,
+        webPreferences: {
+            nodeIntegration: true
+        }
+    })
+    let pathToIndex = path.join(utils.renderer_path.views, "index.html")
+    if (typeof paths === "string")
+        paths = [ paths ]
+    newWindow.loadFile(pathToIndex, {query:{data: JSON.stringify({paths: paths})} })
+}
 function addExplorer(path: string, beCurrent=false) : Explorer
 {
     let exp = new Explorer()
@@ -362,6 +385,26 @@ function addTab(exp: Explorer): HTMLElement
     tab.onauxclick=(e)=>{
         if (e.button==1)
             removeExplorer(exp);
+        if (e.button==2)
+        {
+            new MyMenu([
+                {
+                    title: "Fermer",
+                    onclick:()=>{ removeExplorer(exp); }
+
+                },
+                {
+                    title: "Dupliquer", 
+                    onclick:()=>{ addExplorer(exp.getPath(), true) }
+                },
+                {
+                    title: "Ouvrir dans une nouvelle fenêtre", 
+                    onclick:()=>{ 
+                        addWindow(exp.getPath())
+                    }
+                }
+            ]).popup();
+        }
     }
     tab.onmouseleave=(e)=>{tab.style.background= ""}
     tab.onmousemove=(e)=>{
@@ -376,20 +419,12 @@ function removeTab(exp: Explorer)
     tabsBar.removeChild(exp.getTabElement())
 }
 //INITIAL
-let vPaths:Array<string>;
-if (process.platform==="win32")
-{
-    vPaths=[
-        process.cwd(),
-        process.env.SystemDrive+path.sep,
-        process.env.HOMEDRIVE+process.env.HOMEPATH
-    ]
-}
-let i=0;
-
-vPaths.forEach((p)=>addExplorer(p))
-
+let query = querystring.parse((global as any).location.search)
+let data = JSON.parse(query['?data'] as string)
+if (data.paths)
+    data.paths.forEach((p)=>addExplorer(p))
 let navElem=document.getElementById("nav");
+
 ["previous", "next", "up"].forEach(element => {
     let urlimg = utils.getResourceURL(`nav/${element}.png`)
     let nodeNavBut = utils.pugDom(`img(src="${urlimg}")`) as HTMLElement
