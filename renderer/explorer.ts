@@ -173,7 +173,7 @@ class Explorer
                 this.lsFileInfos.push(currentFile)
             }
             utils.stable_partition(this.lsFileInfos, v=>v.type=="dir")
-            utils.clearElement(this.explorer);
+            
             this.updateExplorerElements();
         });
     }
@@ -229,7 +229,7 @@ class Explorer
         let startFile=(path)=>{
             exec(`start "" "${path}"`)
         }
-        
+        utils.clearElement(this.explorer);
         this.lsFileInfos.forEach((currentFile)=>{
             let img:string;
             if (currentFile.type=="dir")
