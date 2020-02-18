@@ -13,6 +13,8 @@
   * [ ] Copier le chemin d'accès
     * [ ] Paramétrage : quoted comme windows ou non
   * [ ] Supprimer
+    * [ ] Dans la corbeille
+    * [ ] Définitivement
   * [ ] Nouveau fichier
     * [ ] Modèles
 * [ ] Liste dossier dans fleche breadcrumb
@@ -23,6 +25,10 @@
 * [ ] Importer shell Windows (pour les programme comme 7zip, vscode...)
 * [ ] Chargement icone async
 * [ ] Informations sur hover fichier/dossier
+* [ ] Colonne dans l'affichage liste
+  * [ ] Date création
+  * [ ] Date modification
+  * [ ] Taille fichier
 * [x] Onglets
   * [x] Bouton fermer
   * [x] Menus
