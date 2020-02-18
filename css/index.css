@@ -46,7 +46,7 @@ body
     white-space: nowrap;
     overflow: hidden;
     
-    
+    display: inline-flex;
     /* background-position-x: -10px; */
 }
 .tab.selected
@@ -60,10 +60,21 @@ body
     transition: ease 1s;
     opacity: 0.1;
 }
-.tab:hover
+.tab-name
 {
-    transition: ease 1s;
-    opacity: 1;
+    width: 100%;
+}
+.tab-close
+{
+    width: 1em;
+    height: 1em;
+    margin: auto;
+    border: 1px solid rgba(255, 255, 255, 0);
+}
+.tab-close:hover
+{
+    background-color: var(--col-hovered);
+    border: 1px solid var(--col-border-hovered); 
 }
 #sass-explorer
 {

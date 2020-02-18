@@ -11,6 +11,7 @@ import * as utils from './utils'
 
 const urlFolderPng=utils.getResourceURL("Folder.png")
 const urlFilePng=utils.getResourceURL("File.png")
+const urlClosePng=utils.getResourceURL("Close.png")
 
 const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
 const pugTabItem = pug.compileFile(path.join(utils.renderer_path.views, "tabs", "item.pug"))
@@ -41,7 +42,6 @@ class ExplorerHistory {
     private hist : Array<HistoryData> = new Array<HistoryData>()
     private currentpos:number = -1;
     private stocksize:number = 0;
-    
 
     onChangeHistory:(d:HistoryData)=>void;
     
@@ -96,6 +96,10 @@ class Explorer
             this.tab = addTab(this)
         this.history.onChangeHistory=(data)=>this.gotoForHistory(data)
     }
+    setTabName(newName: string)
+    {
+        this.tab.querySelector(".tab-name").textContent=newName
+    }
     getPath(): string 
     {
         return this.currentPath;
@@ -144,7 +148,7 @@ class Explorer
         this.currentPath = path.resolve(this.currentPath)
         
         bc.update(this.currentPath);
-        this.tab.textContent=utils.getFolderName(this.currentPath)
+        this.setTabName(utils.getFolderName(this.currentPath))
         fs.readdir(this.currentPath,(err, files)=>{
             if (err)
             {
@@ -379,9 +383,12 @@ function removeExplorer(exp: Explorer|number)
 }
 function addTab(exp: Explorer): HTMLElement
 {
-    let test=pugTabItem({name:""})
+    let test=pugTabItem({name:"", imgClose: urlClosePng})
     let tab: HTMLElement = utils.stringToDom(test).firstChild as HTMLElement;
-    tab.onclick=(e)=>setCurrentExplorer(exp)
+    let tabClose = tab.querySelector("img")
+    let closing=false;
+    tabClose.onclick=(e)=>{ removeExplorer(exp); closing=true;}
+    tab.onclick=(e)=>{if (!closing) setCurrentExplorer(exp)}
     tab.onauxclick=(e)=>{
         if (e.button==1)
             removeExplorer(exp);
@@ -406,6 +413,7 @@ function addTab(exp: Explorer): HTMLElement
             ]).popup();
         }
     }
+    
     tab.onmouseleave=(e)=>{tab.style.background= ""}
     tab.onmousemove=(e)=>{
         if (exp!==currentExplorer)

@@ -23,8 +23,8 @@
 * [ ] Importer shell Windows (pour les programme comme 7zip, vscode...)
 * [ ] Chargement icone async
 * [ ] Informations sur hover fichier/dossier
-* [ ] Onglets
-  * [ ] Bouton fermer
+* [x] Onglets
+  * [x] Bouton fermer
   * [x] Menus
     * [x] Fermer
     * [x] Dupliquer
