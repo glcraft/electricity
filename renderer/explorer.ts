@@ -180,9 +180,10 @@ class Explorer
         let makeFolderConfig=(fileinfo:FileInfo)=>{
             return [
                 {
-                    title: "Folder", 
+                    title: "Dossier", 
                     enabled:false
-                },,
+                },
+                {},
                 {
                     title: "Ouvrir", 
                     onclick:()=>{ gotoFolder(fileinfo.path) }
@@ -203,6 +204,7 @@ class Explorer
                     title: "Fichier",
                     enabled:false
                 },
+                {},
                 {
                     title: "Ouvrir", 
                     onclick:()=>{ exec(`start "" "${fileinfo.path}"`) }
