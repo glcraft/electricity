@@ -334,9 +334,12 @@ export function setCurrentExplorer(exp: Explorer|number)
 }
 function addWindow(paths: string | string[])
 {
+    let currentBound = remote.getCurrentWindow().getBounds();
     let newWindow = new remote.BrowserWindow({ 
-        width: 1920/4*3, 
-        height: 1080/4*3,
+        width: currentBound.width, 
+        height: currentBound.height, 
+        x: currentBound.x+32, 
+        y: currentBound.y+32, 
         show: true,
         webPreferences: {
             nodeIntegration: true
