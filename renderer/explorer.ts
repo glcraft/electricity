@@ -15,7 +15,7 @@ const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "ex
 const pugTabItem = pug.compileFile(path.join(utils.renderer_path.views, "tabs", "item.pug"))
 let tabsBar=document.getElementById("tab-bar")
 
-class FileInfo
+export class FileInfo
 {
     path: string;
     type: "file"|"dir"|"unknown";
