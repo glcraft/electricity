@@ -193,7 +193,7 @@ class Explorer
                     onclick:()=>{ addExplorer(fileinfo.path, true) }
                 },
                 {
-                    title: "Propriétés", 
+                    title: "PropriÃ©tÃ©s", 
                     onclick:()=>{ showProperties(path.resolve(fileinfo.path)) }
                 }
             ];
@@ -213,7 +213,7 @@ class Explorer
                     onclick:()=>{ openWith(path.resolve(fileinfo.path)) }
                 },
                 {
-                    title: "Propriétés", 
+                    title: "PropriÃ©tÃ©s", 
                     onclick:()=>{ showProperties(path.resolve(fileinfo.path)) }
                 }
             ];
@@ -361,6 +361,20 @@ function addTab(exp: Explorer): HTMLElement
     tab.onauxclick=(e)=>{
         if (e.button==1)
             removeExplorer(exp);
+        if (e.button==2)
+        {
+            new MyMenu([
+                {
+                    title: "Fermer",
+                    onclick:()=>{ removeExplorer(exp); }
+
+                },
+                {
+                    title: "Dupliquer", 
+                    onclick:()=>{ addExplorer(exp.getPath(), true) }
+                },
+            ]).popup();
+        }
     }
     tab.onmouseleave=(e)=>{tab.style.background= ""}
     tab.onmousemove=(e)=>{
