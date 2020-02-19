@@ -8,14 +8,12 @@ import { exec } from "child_process"
 import { MyMenu } from "./mymenu"
 import * as bc from './breadcrumb'
 import * as utils from './utils'
+import {Tab} from './tab'
 
 const urlFolderPng=utils.getResourceURL("Folder.png")
 const urlFilePng=utils.getResourceURL("File.png")
-const urlClosePng=utils.getResourceURL("Close.png")
 
 const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
-const pugTabItem = pug.compileFile(path.join(utils.renderer_path.views, "tabs", "item.pug"))
-let tabsBar=document.getElementById("tab-bar")
 
 export class FileInfo
 {
@@ -74,31 +72,28 @@ class ExplorerHistory {
     // }
 }
 
-class Explorer
+export class Explorer
 {
     private explorer: HTMLElement;
-    private tab: HTMLElement;
+    private tab: Tab;
     private currentPath: string;
     private history:ExplorerHistory = new ExplorerHistory();
     private menu:MyMenu;
     private lsFileInfos: Array<FileInfo>;
     private lsFileSelected: Array<FileInfo>;
     
-    constructor(expElem?: HTMLElement, tabElem?:HTMLElement)
+    constructor(expElem?: HTMLElement)
     {
         if (expElem)
             this.explorer=expElem
         else
             this.explorer=utils.pugDom('.explorer.explorer-list(data-type="list")') as HTMLElement;
-        if (tabElem)
-            this.tab=tabElem
-        else
-            this.tab = addTab(this)
+        this.tab = new Tab(this)
         this.history.onChangeHistory=(data)=>this.gotoForHistory(data)
     }
     setTabName(newName: string)
     {
-        this.tab.querySelector(".tab-name").textContent=newName
+        this.tab.setName(newName)
     }
     getPath(): string 
     {
@@ -108,7 +103,7 @@ class Explorer
     {
         return this.explorer;
     }
-    getTabElement():HTMLElement
+    getTab():Tab
     {
         return this.tab;
     }
@@ -141,6 +136,22 @@ class Explorer
         let newPath = path.dirname(this.currentPath);
         if (newPath!==this.currentPath)
             this.goto(newPath)
+    }
+    close(keepTab?:boolean)
+    {
+        let id = explorers.findIndex(e=>e===this)
+        explorers.splice(id, 1)
+        if (keepTab)
+            this.tab.close(true)
+        if (explorers.length==0)
+            remote.getCurrentWindow().close()
+        if (this===currentExplorer)
+        {
+            if (id===0)
+                setCurrentExplorer(0)
+            else
+            setCurrentExplorer(id-1)
+        }
     }
     update()
     {
@@ -328,16 +339,20 @@ export function setCurrentExplorer(exp: Explorer|number)
     if (sassExplorer.hasChildNodes())
         sassExplorer.removeChild(currentExplorer.getExplorerElement())
     if (currentExplorer)
-        currentExplorer.getTabElement().classList.remove("selected")
+        currentExplorer.getTab().unselect()
     if (typeof exp === "number")
         currentExplorer = explorers[exp]
     else
         currentExplorer = exp;
-    currentExplorer.getTabElement().classList.add("selected")
+        currentExplorer.getTab().select()
     sassExplorer.appendChild(currentExplorer.getExplorerElement())
     currentExplorer.update()
 }
-function addWindow(paths: string | string[])
+export function getCurrentExplorer(): Explorer
+{
+    return currentExplorer;
+}
+export function addWindow(paths: string | string[])
 {
     let currentBound = remote.getCurrentWindow().getBounds();
     let newWindow = new remote.BrowserWindow({ 
@@ -355,7 +370,7 @@ function addWindow(paths: string | string[])
         paths = [ paths ]
     newWindow.loadFile(pathToIndex, {query:{data: JSON.stringify({paths: paths})} })
 }
-function addExplorer(path: string, beCurrent=false) : Explorer
+export function addExplorer(path: string, beCurrent=false) : Explorer
 {
     let exp = new Explorer()
     exp.goto(path)
@@ -364,67 +379,9 @@ function addExplorer(path: string, beCurrent=false) : Explorer
         setCurrentExplorer(exp);
     return exp
 }
-function removeExplorer(exp: Explorer|number)
+export function removeExplorer(exp: Explorer|number)
 {
-    if (typeof exp === "number")
-        exp=explorers[exp]
-    let id = explorers.findIndex(e=>e===exp)
-    explorers.splice(id, 1)
-    removeTab(exp)
-    if (explorers.length==0)
-        remote.getCurrentWindow().close()
-    if (exp===currentExplorer)
-    {
-        if (id===0)
-            setCurrentExplorer(0)
-        else
-        setCurrentExplorer(id-1)
-    }
-}
-function addTab(exp: Explorer): HTMLElement
-{
-    let test=pugTabItem({name:"", imgClose: urlClosePng})
-    let tab: HTMLElement = utils.stringToDom(test).firstChild as HTMLElement;
-    let tabClose = tab.querySelector("img")
-    let closing=false;
-    tabClose.onclick=(e)=>{ removeExplorer(exp); closing=true;}
-    tab.onclick=(e)=>{if (!closing) setCurrentExplorer(exp)}
-    tab.onauxclick=(e)=>{
-        if (e.button==1)
-            removeExplorer(exp);
-        if (e.button==2)
-        {
-            new MyMenu([
-                {
-                    title: "Fermer",
-                    onclick:()=>{ removeExplorer(exp); }
-
-                },
-                {
-                    title: "Dupliquer", 
-                    onclick:()=>{ addExplorer(exp.getPath(), true) }
-                },
-                {
-                    title: "Ouvrir dans une nouvelle fenêtre", 
-                    onclick:()=>{ 
-                        addWindow(exp.getPath())
-                    }
-                }
-            ]).popup();
-        }
-    }
-    
-    tab.onmouseleave=(e)=>{tab.style.background= ""}
-    tab.onmousemove=(e)=>{
-        if (exp!==currentExplorer)
-            tab.style.background= `radial-gradient(200px at ${e.pageX - tab.offsetLeft}px 50%, var(--col-hovered) 0%, rgba(0,0,0,0) 100%)`
-    }
-    tabsBar.appendChild(tab)
-    return tab;
-}
-function removeTab(exp: Explorer)
-{
-    tabsBar.removeChild(exp.getTabElement())
+    currentExplorer.close();
 }
 //INITIAL
 let query = querystring.parse((global as any).location.search)

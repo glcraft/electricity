@@ -1,11 +1,11 @@
 # TODO Electricity
 ## Technique
-* [ ] Créer classe pour Tab
+* [x] Créer classe pour Tab
 ## Fonctionnement de base
 * [ ] Entete
 * [ ] Pied
   * [ ] Nombres d'éléments
-  * [ ] Taches courrante 
+  * [ ] Taches courante 
     * [ ] Copier/Coller
 * [ ] Fonctions usuelles
   * [ ] Copier/Couper/Coller
