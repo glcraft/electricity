@@ -417,7 +417,7 @@ function addTab(exp: Explorer): HTMLElement
     tab.onmouseleave=(e)=>{tab.style.background= ""}
     tab.onmousemove=(e)=>{
         if (exp!==currentExplorer)
-            tab.style.background= `radial-gradient(200px at ${e.offsetX}px 50%, var(--col-hovered) 0%, rgba(0,0,0,0) 100%)`
+            tab.style.background= `radial-gradient(200px at ${e.pageX - tab.offsetLeft}px 50%, var(--col-hovered) 0%, rgba(0,0,0,0) 100%)`
     }
     tabsBar.appendChild(tab)
     return tab;
