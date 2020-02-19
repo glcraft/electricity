@@ -1,4 +1,5 @@
 import {remote, Menu, MenuItem, PopupOptions, BrowserWindow} from 'electron'
+import {FileInfo} from './explorer'
 
 interface MyMenuItem
 {
@@ -60,4 +61,26 @@ export class MyMenu
         });
         return menu;
     }
+}
+
+export function makeCopyPaste(fi:FileInfo): Array<MyMenuItem>
+{
+    return [
+        {
+            title: "Copier",
+            onclick: ()=>{}
+        },
+        {
+            title: "Copier le chemin",
+            onclick: ()=>{}
+        },
+        {
+            title: "Couper",
+            onclick: ()=>{}
+        },
+        {
+            title: "Coller",
+            onclick: ()=>{}
+        }
+    ]
 }

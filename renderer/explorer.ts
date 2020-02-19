@@ -11,16 +11,18 @@ import * as utils from './utils'
 
 const urlFolderPng=utils.getResourceURL("Folder.png")
 const urlFilePng=utils.getResourceURL("File.png")
+const urlClosePng=utils.getResourceURL("Close.png")
 
 const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
 const pugTabItem = pug.compileFile(path.join(utils.renderer_path.views, "tabs", "item.pug"))
 let tabsBar=document.getElementById("tab-bar")
 
-class FileInfo
+export class FileInfo
 {
     path: string;
     type: "file"|"dir"|"unknown";
     name: string;
+    stat: fs.Stats;
 }
 class FileInfoPug
 {
@@ -40,7 +42,6 @@ class ExplorerHistory {
     private hist : Array<HistoryData> = new Array<HistoryData>()
     private currentpos:number = -1;
     private stocksize:number = 0;
-    
 
     onChangeHistory:(d:HistoryData)=>void;
     
@@ -95,6 +96,10 @@ class Explorer
             this.tab = addTab(this)
         this.history.onChangeHistory=(data)=>this.gotoForHistory(data)
     }
+    setTabName(newName: string)
+    {
+        this.tab.querySelector(".tab-name").textContent=newName
+    }
     getPath(): string 
     {
         return this.currentPath;
@@ -143,11 +148,11 @@ class Explorer
         this.currentPath = path.resolve(this.currentPath)
         
         bc.update(this.currentPath);
-        this.tab.textContent=utils.getFolderName(this.currentPath)
+        this.setTabName(utils.getFolderName(this.currentPath))
         fs.readdir(this.currentPath,(err, files)=>{
             if (err)
             {
-                console.log(`Erreur lecture du dossier ${this.currentPath}`, err);
+                console.error(`Erreur lecture du dossier ${this.currentPath}`, err);
                 return;
             }
             this.lsFileInfos = new Array<FileInfo>();
@@ -158,10 +163,8 @@ class Explorer
                 currentFile.path = `${this.currentPath}/${value}`
                 currentFile.name = value;
                 try {
-                    let stats = fs.lstatSync(currentFile.path)
-                    if (err)
-                        currentFile.type="unknown"
-                    else if (stats.isDirectory())
+                    currentFile.stat = fs.lstatSync(currentFile.path, {bigint: true})
+                    if (currentFile.stat.isDirectory())
                         currentFile.type="dir"
                     else
                         currentFile.type="file"
@@ -173,7 +176,7 @@ class Explorer
                 this.lsFileInfos.push(currentFile)
             }
             utils.stable_partition(this.lsFileInfos, v=>v.type=="dir")
-            utils.clearElement(this.explorer);
+            
             this.updateExplorerElements();
         });
     }
@@ -182,9 +185,10 @@ class Explorer
         let makeFolderConfig=(fileinfo:FileInfo)=>{
             return [
                 {
-                    title: "Folder", 
+                    title: "Dossier", 
                     enabled:false
-                },,
+                },
+                {},
                 {
                     title: "Ouvrir", 
                     onclick:()=>{ gotoFolder(fileinfo.path) }
@@ -209,6 +213,7 @@ class Explorer
                     title: "Fichier",
                     enabled:false
                 },
+                {},
                 {
                     title: "Ouvrir", 
                     onclick:()=>{ exec(`start "" "${fileinfo.path}"`) }
@@ -233,7 +238,7 @@ class Explorer
         let startFile=(path)=>{
             exec(`start "" "${path}"`)
         }
-        
+        utils.clearElement(this.explorer);
         this.lsFileInfos.forEach((currentFile)=>{
             let img:string;
             if (currentFile.type=="dir")
@@ -378,9 +383,12 @@ function removeExplorer(exp: Explorer|number)
 }
 function addTab(exp: Explorer): HTMLElement
 {
-    let test=pugTabItem({name:""})
+    let test=pugTabItem({name:"", imgClose: urlClosePng})
     let tab: HTMLElement = utils.stringToDom(test).firstChild as HTMLElement;
-    tab.onclick=(e)=>setCurrentExplorer(exp)
+    let tabClose = tab.querySelector("img")
+    let closing=false;
+    tabClose.onclick=(e)=>{ removeExplorer(exp); closing=true;}
+    tab.onclick=(e)=>{if (!closing) setCurrentExplorer(exp)}
     tab.onauxclick=(e)=>{
         if (e.button==1)
             removeExplorer(exp);
@@ -405,6 +413,7 @@ function addTab(exp: Explorer): HTMLElement
             ]).popup();
         }
     }
+    
     tab.onmouseleave=(e)=>{tab.style.background= ""}
     tab.onmousemove=(e)=>{
         if (exp!==currentExplorer)
