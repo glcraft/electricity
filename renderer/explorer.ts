@@ -2,10 +2,10 @@ import * as path from 'path'
 import * as querystring from 'querystring'
 import * as fs from 'fs'
 import * as pug from 'pug'
-import {remote} from 'electron'
-import {extractIcon,openWith, showProperties} from 'internal_module'
-import {exec} from "child_process"
-import {MyMenu} from "./mymenu"
+import { remote } from 'electron'
+import { extractIcon, openWith, showProperties } from 'internal_module'
+import { exec } from "child_process"
+import { MyMenu } from "./mymenu"
 import * as bc from './breadcrumb'
 import * as utils from './utils'
 
