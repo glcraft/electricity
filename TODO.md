@@ -1,10 +1,12 @@
 # TODO Electricity
 ## Technique
 * [x] Créer classe pour Tab
-* [x] Icônes 
+* [ ] Icônes 
   * [x] Nouveau fichiers TS
   * [x] Icons storage : stocker des icônes venant de plugins/modèles
   * [x] Méthode de récupération des icônes
+  * [ ] Chargement async
+  * [ ] Element taille prérempli (pour que la ligne ne se redimensionne pas après chargement)
 ## Fonctionnement de base
 * [ ] Entête
 * [ ] Pied
