@@ -154,9 +154,16 @@ body
 {
     width: 0.75em;
 }
-.bc-ls-folder>*
+.bc-ls-item>img
+{
+    width: 1em;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+.bc-ls-item>span
 {
     white-space: nowrap;
+    padding: 0px 0.5em;
 }
 .bc-ls-folder
 {

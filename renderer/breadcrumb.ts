@@ -5,6 +5,9 @@ import * as utils from './utils'
 import * as explorer from './explorer'
 
 const pugBCItem = pug.compileFile(path.join(utils.renderer_path.views, "breadcrumb", "item.pug"))
+const pugBCLSItem = pug.compileFile(path.join(utils.renderer_path.views, "breadcrumb", "lsitem.pug"))
+
+const urlFolderPng=utils.getResourceURL("Folder.png")
 
 export function update(currentPath: string)
 {
@@ -50,9 +53,7 @@ export function update(currentPath: string)
                             let stat = fs.lstatSync(path)
                             if (stat.isDirectory())
                             {
-                                let elem=document.createElement("div")
-                                elem.textContent=name
-                                elem.classList.add("explorer-hoverable")
+                                let elem = utils.stringToDom(pugBCLSItem({urlFolder: urlFolderPng, folderName: name}));
                                 domBCLSF.appendChild(elem)
                             }
                         }
