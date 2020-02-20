@@ -1,6 +1,10 @@
 # TODO Electricity
 ## Technique
 * [x] Créer classe pour Tab
+* [ ] Icônes 
+  * [ ] Nouveau fichiers TS
+  * [ ] Icons storage : stocker des icônes venant de plugins/modèles
+  * [ ] Méthode de récupération des icônes
 ## Fonctionnement de base
 * [ ] Entête
 * [ ] Pied
@@ -21,7 +25,13 @@
   * [x] Icône à gauche de l'item 
 * [ ] Drag drop
 * [ ] Container (Explorer est un type de container)
+* [ ] Explorateur particulier
+  * [ ] Police d'écriture
+  * [ ] Accueil
+  * [ ] Liste disque
 * [ ] Paramétrages
+  * [ ] Container
+  * [ ] 
 * [ ] Accès rapide/bookmark
 * [ ] Importer shell Windows (pour les programme comme 7zip, vscode...)
 * [ ] Chargement icône async
@@ -40,4 +50,4 @@
 * [ ] ? Macros
 ## API
   * [ ] Fichier de langue
-  * [ ] Custom icon
+  * [ ] Custom icon (voir [Technique](#technique))
