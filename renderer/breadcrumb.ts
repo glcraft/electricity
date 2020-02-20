@@ -3,6 +3,7 @@ import * as fs from 'fs'
 import * as pug from 'pug'
 import * as utils from './utils'
 import * as explorer from './explorer'
+import { iconManager } from './icons'
 
 const pugBCItem = pug.compileFile(path.join(utils.renderer_path.views, "breadcrumb", "item.pug"))
 const pugBCLSItem = pug.compileFile(path.join(utils.renderer_path.views, "breadcrumb", "lsitem.pug"))
@@ -47,13 +48,15 @@ export function update(currentPath: string)
                 fs.readdir(pathCurrentButton,(err, files)=>{
                     for (let iFile = 0;iFile<files.length;++iFile)
                     {
-                        let name = files[iFile];
-                        let path = `${pathCurrentButton}/${name}`
+                        let fileinfo: explorer.FileInfo=new explorer.FileInfo;
+                        fileinfo.name=files[iFile];
+                        fileinfo.path=`${pathCurrentButton}/${fileinfo.name}`;
                         try {
-                            let stat = fs.lstatSync(path)
-                            if (stat.isDirectory())
+                            fileinfo.stat = fs.lstatSync(fileinfo.path)
+                            if (fileinfo.stat.isDirectory())
                             {
-                                let elem = utils.stringToDom(pugBCLSItem({urlFolder: urlFolderPng, folderName: name}));
+                                fileinfo.type="dir"
+                                let elem = utils.stringToDom(pugBCLSItem({urlFolder: iconManager.getIcon(fileinfo, 24), folderName: fileinfo.name}));
                                 domBCLSF.appendChild(elem)
                             }
                         }

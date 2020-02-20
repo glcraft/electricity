@@ -9,6 +9,7 @@ import { MyMenu } from "./mymenu"
 import * as bc from './breadcrumb'
 import * as utils from './utils'
 import {Tab} from './tab'
+import { iconManager } from './icons'
 
 const urlFolderPng=utils.getResourceURL("Folder.png")
 const urlFilePng=utils.getResourceURL("File.png")
@@ -251,16 +252,7 @@ export class Explorer
         }
         utils.clearElement(this.explorer);
         this.lsFileInfos.forEach((currentFile)=>{
-            let img:string;
-            if (currentFile.type=="dir")
-                img = urlFolderPng;
-            else if (currentFile.type=="file")
-            {
-                let b64Icon = extractIcon(currentFile.path)
-                img =`data:image/png;base64,${b64Icon}`;
-            }
-            else 
-                img = urlFilePng;
+            let img:string=iconManager.getIcon(currentFile, 24);
             
             let nodeFile = utils.stringToDom(pugExplorerItem({file:currentFile, img: img}));
             let elemFile = (nodeFile.childNodes[0] as HTMLElement)
