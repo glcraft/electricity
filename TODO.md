@@ -2,7 +2,7 @@
 ## Technique
 * [x] Créer classe pour Tab
 ## Fonctionnement de base
-* [ ] Entete
+* [ ] Entête
 * [ ] Pied
   * [ ] Nombres d'éléments
   * [ ] Taches courante 
@@ -23,7 +23,7 @@
 * [ ] Paramétrages
 * [ ] Accès rapide/bookmark
 * [ ] Importer shell Windows (pour les programme comme 7zip, vscode...)
-* [ ] Chargement icone async
+* [ ] Chargement icône async
 * [ ] Informations sur hover fichier/dossier
 * [ ] Colonne dans l'affichage liste
   * [ ] Date création
@@ -35,7 +35,7 @@
     * [x] Fermer
     * [x] Dupliquer
     * [x] Ouvrir dans une nouvelle fenêtre
-* [ ] Raccourcis
+* [ ] Raccourcis clavier
 * [ ] ? Macros
 ## API
   * [ ] Fichier de langue
