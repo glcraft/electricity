@@ -2,7 +2,7 @@ import {FileInfo} from './explorer'
 import * as utils from './utils'
 import { extractIcon } from 'internal_module'
 
-interface IconStorage
+export interface IconStorage
 {
     getIcon(itemInfo: FileInfo, iconsize: number): string|undefined;
 }

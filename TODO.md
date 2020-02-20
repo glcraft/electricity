@@ -1,10 +1,10 @@
 # TODO Electricity
 ## Technique
 * [x] Créer classe pour Tab
-* [ ] Icônes 
-  * [ ] Nouveau fichiers TS
-  * [ ] Icons storage : stocker des icônes venant de plugins/modèles
-  * [ ] Méthode de récupération des icônes
+* [x] Icônes 
+  * [x] Nouveau fichiers TS
+  * [x] Icons storage : stocker des icônes venant de plugins/modèles
+  * [x] Méthode de récupération des icônes
 ## Fonctionnement de base
 * [ ] Entête
 * [ ] Pied
@@ -49,5 +49,5 @@
 * [ ] Raccourcis clavier
 * [ ] ? Macros
 ## API
-  * [ ] Fichier de langue
-  * [ ] Custom icon (voir [Technique](#technique))
+* [ ] Fichier de langue
+* [ ] Custom icon (voir [Technique](#technique))
