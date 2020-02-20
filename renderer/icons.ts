@@ -30,9 +30,11 @@ class DefaultIconStorage implements IconStorage
 class IconManager implements IconStorage
 {
     private lsStorages: Array<IconStorage> =[];
+    public defaultIconsStorage: IconStorage;
     constructor()
     {
-        this.registerIconStorage(new DefaultIconStorage);
+        this.defaultIconsStorage=new DefaultIconStorage
+        this.registerIconStorage(this.defaultIconsStorage);
     }
     registerIconStorage(iconstorage: IconStorage)
     {
