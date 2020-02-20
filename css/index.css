@@ -154,7 +154,19 @@ body
 {
     width: 0.75em;
 }
-
+.bc-ls-folder>*
+{
+    white-space: nowrap;
+}
+.bc-ls-folder
+{
+    position: absolute;
+    border: 1px solid lightgray;
+    background-color: white;
+    max-height: 20vh;
+    overflow-y: overlay;
+    padding-right: 20px;
+}
 #address-bar
 {
     border: 1px solid gray;

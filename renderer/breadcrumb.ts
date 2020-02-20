@@ -27,9 +27,47 @@ export function update(currentPath: string)
         
         let htmlBCItem = pugBCItem({name: field, sepfile: utils.getResourceURL("breadcrumb_sep.png")})
         let nodeBCItem = utils.stringToDom(htmlBCItem);
+        let DomBCItem = nodeBCItem.childNodes[0] as HTMLElement;
         let pathCurrentButton = pathButton;
-        ((nodeBCItem as HTMLElement).children[0] as HTMLElement).onclick = ()=>{
+        DomBCItem.onclick = ()=>{
             explorer.gotoFolder(pathCurrentButton)
+        }
+        let domBCSep = (<HTMLElement>nodeBCItem).querySelector<HTMLElement>(".bc-sep");
+        let domBCLSF = (<HTMLElement>nodeBCItem).querySelector<HTMLElement>(".bc-ls-folder");
+        let domBCLSFAll = document.querySelectorAll<HTMLElement>(".bc-ls-folder");
+        domBCSep.onclick = ()=>{
+            if (domBCLSF.style.display=="none")
+            {
+                domBCLSFAll.forEach(el=>el.style.display="none")
+                domBCLSF.style.display="block";
+                utils.clearElement(domBCLSF)
+                fs.readdir(pathCurrentButton,(err, files)=>{
+                    for (let iFile = 0;iFile<files.length;++iFile)
+                    {
+                        let name = files[iFile];
+                        let path = `${pathCurrentButton}/${name}`
+                        try {
+                            let stat = fs.lstatSync(path)
+                            if (stat.isDirectory())
+                            {
+                                let elem=document.createElement("div")
+                                elem.textContent=name
+                                elem.classList.add("explorer-hoverable")
+                                domBCLSF.appendChild(elem)
+                            }
+                        }
+                        catch (err)
+                        {}
+                    }
+                })
+            }
+            else
+                domBCLSF.style.display="none";
+        }
+        domBCLSF.onclick = (e)=>{
+            explorer.gotoFolder(`${pathCurrentButton}/${(<HTMLElement>e.target).textContent}`)
+            
+            domBCLSF.style.display="none";
         }
         nodeBC.append(nodeBCItem)
     }

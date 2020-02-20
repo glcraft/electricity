@@ -17,7 +17,7 @@
     * [ ] Définitivement
   * [ ] Nouveau fichier
     * [ ] Modèles
-* [ ] Liste dossier dans fleche breadcrumb
+* [x] Liste dossier dans flèche breadcrumb
 * [ ] Drag drop
 * [ ] Container (Explorer est un type de container)
 * [ ] Paramétrages
