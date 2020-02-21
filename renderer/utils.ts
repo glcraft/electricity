@@ -77,3 +77,16 @@ export function searchObjectCaseIns(obj:Object, toSearch:string):any
         }
     }
 }
+
+export function download(url:string, method: "GET"|"POST"): Promise<string> {
+    return new Promise<string>((resolve, reject)=>{
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) 
+                resolve(xhr.responseText);
+            else
+                reject(xhr)
+        };
+        xhr.open(method, url, true);
+    })
+  }
