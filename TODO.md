@@ -7,6 +7,7 @@
   * [x] Méthode de récupération des icônes
   * [x] Chargement async
   * [x] Element taille prérempli (pour que la ligne ne se redimensionne pas après chargement)
+* [ ] Créer classe Action (ex: CopyAction, MoveAction, etc...)
 ## Fonctionnement de base
 * [ ] Entête
 * [ ] Pied
