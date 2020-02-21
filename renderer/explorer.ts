@@ -12,7 +12,7 @@ import {Tab} from './tab'
 import { iconManager } from './icons'
 
 const urlFolderPng=utils.getResourceURL("Folder.png")
-const urlFilePng=utils.getResourceURL("File.png")
+const urlWaiterPng=utils.getResourceURL("waiter.svg")
 
 const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
 
@@ -252,7 +252,7 @@ export class Explorer
         }
         utils.clearElement(this.explorer);
         this.lsFileInfos.forEach((currentFile)=>{
-            let nodeFile = utils.stringToDom(pugExplorerItem({file:currentFile, img: urlFilePng}));
+            let nodeFile = utils.stringToDom(pugExplorerItem({file:currentFile, img: urlWaiterPng}));
             let elemFile = (nodeFile.childNodes[0] as HTMLElement)
             iconManager.getIcon(currentFile, 24).then(urlIcon=>{
                 let newImg = document.createElement("img");
