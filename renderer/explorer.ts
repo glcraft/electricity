@@ -256,9 +256,9 @@ export class Explorer
             let elemFile = (nodeFile.childNodes[0] as HTMLElement)
             iconManager.getIcon(currentFile, 24).then(urlIcon=>{
                 let newImg = document.createElement("img");
-                let img = (elemFile as HTMLElement).querySelector('img')
+                let img = elemFile.querySelector('img')
                 newImg.onload=()=>{
-                    img.parentElement.replaceChild(newImg,img)
+                    img.replaceWith(newImg)
                 }
                 newImg.src = urlIcon
             });
