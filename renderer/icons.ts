@@ -1,16 +1,17 @@
 import {FileInfo} from './explorer'
 import * as utils from './utils'
 import { extractIcon } from 'internal_module'
+import { resolve } from 'dns'
 
 export interface IconStorage
 {
-    getIcon(itemInfo: FileInfo, iconsize: number): string|undefined;
+    getIcon(itemInfo: FileInfo, iconsize: number): string | undefined
 }
 class DefaultIconStorage implements IconStorage
 {
     static readonly urlFolderPng=utils.getResourceURL("Folder.png")
     static readonly urlFilePng=utils.getResourceURL("File.png")
-    getIcon(itemInfo: FileInfo, iconsize: number): string|undefined
+    getIcon(itemInfo: FileInfo, iconsize: number): string | undefined
     {
         let img: string;
         if (itemInfo.type=="dir")
@@ -27,7 +28,7 @@ class DefaultIconStorage implements IconStorage
     }
 }
 
-class IconManager implements IconStorage
+class IconManager
 {
     private lsStorages: Array<IconStorage> =[];
     public defaultIconsStorage: IconStorage;
@@ -46,15 +47,17 @@ class IconManager implements IconStorage
         if (i > -1)
             this.lsStorages.splice(i, 1);
     }
-    getIcon(itemInfo: FileInfo, iconsize: number): string|undefined
+    getIcon(itemInfo: FileInfo, iconsize: number): Promise<string>
     {
-        for(let i=this.lsStorages.length-1;i>=0;--i)
-        {
-            let ic = this.lsStorages[i].getIcon(itemInfo, iconsize)
-            if (ic)
-                return ic;
-        }
-        return "";
+        return new Promise<string | undefined>((resolve, reject)=>{
+            for(let i=this.lsStorages.length-1;i>=0;--i)
+            {
+                let ic = this.lsStorages[i].getIcon(itemInfo, iconsize)
+                if (ic)
+                    resolve(ic);
+            }
+            reject("icon not found");
+        })
     }
 }
 export let iconManager: IconManager=new IconManager();

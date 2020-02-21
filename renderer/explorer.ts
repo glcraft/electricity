@@ -252,10 +252,16 @@ export class Explorer
         }
         utils.clearElement(this.explorer);
         this.lsFileInfos.forEach((currentFile)=>{
-            let img:string=iconManager.getIcon(currentFile, 24);
-            
-            let nodeFile = utils.stringToDom(pugExplorerItem({file:currentFile, img: img}));
+            let nodeFile = utils.stringToDom(pugExplorerItem({file:currentFile, img: urlFilePng}));
             let elemFile = (nodeFile.childNodes[0] as HTMLElement)
+            iconManager.getIcon(currentFile, 24).then(urlIcon=>{
+                let newImg = document.createElement("img");
+                let img = (elemFile as HTMLElement).querySelector('img')
+                newImg.onload=()=>{
+                    img.parentElement.replaceChild(newImg,img)
+                }
+                newImg.src = urlIcon
+            });
             elemFile.ondblclick = ()=>{
                 switch (currentFile.type) {
                     case "dir":
