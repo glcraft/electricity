@@ -43,12 +43,11 @@ export function clearElement(exp: Element)
 }
 export function getFolderName(p:string) {
     let t = /^(\w):[\\/]?$/.exec(p);
+    
     if (t)
-        return `Disque ${t[1]}`
+        return `Disque ${t[1].toLocaleUpperCase()}`
     else 
-    {
         return path.basename(p);
-    }
 }
 export function pugDom(pugString:string) : Node
 {
