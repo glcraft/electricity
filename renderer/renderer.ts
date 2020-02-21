@@ -1,6 +1,19 @@
 import {IconStorage, iconManager} from './icons'
 import * as vsicons from 'vscode-icons-js';
 import { FileInfo } from './explorer';
+import { extractIcon } from 'internal_module'
+class ExecutableIcons implements IconStorage
+{
+    getIcon(itemInfo: FileInfo, iconsize: number): string|undefined
+    {
+        if (itemInfo.type=="file" && /\.(?:exe|scr|cmd)$/.test(itemInfo.name))
+        {
+            let b64Icon = extractIcon(itemInfo.path)
+            return `data:image/png;base64,${b64Icon}`;
+        }
+        return undefined;
+    }
+}
 class VSCodeIcons implements IconStorage
 {
     getIcon(itemInfo: FileInfo, iconsize: number): string|undefined
@@ -19,6 +32,7 @@ class VSCodeIcons implements IconStorage
     }
 }
 iconManager.registerIconStorage(new VSCodeIcons)
+iconManager.registerIconStorage(new ExecutableIcons)
 
 import './explorer'
 
