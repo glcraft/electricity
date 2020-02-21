@@ -14,6 +14,8 @@
   * [ ] Taches courante 
     * [ ] Copier/Coller
 * [ ] Fonctions usuelles
+  * [ ] Rechercher dans le dossier courant
+  * [ ] Rechercher récursivement
   * [ ] Copier/Couper/Coller
   * [ ] Renommer
   * [ ] Copier le chemin d'accès
