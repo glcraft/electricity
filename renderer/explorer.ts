@@ -14,7 +14,8 @@ import { iconManager } from './icons'
 const urlFolderPng=utils.getResourceURL("Folder.png")
 const urlWaiterPng=utils.getResourceURL("waiter.svg")
 
-const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
+const pugExplorer = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "explorer.pug"))
+const pugExpItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
 
 export class FileInfo
 {
@@ -116,6 +117,7 @@ export class Explorer
     }
     goto(pathFolder: string)
     {
+        pathFolder = path.resolve(pathFolder)
         if (fs.existsSync(pathFolder) && this.currentPath!=pathFolder)
         {
             this.currentPath=pathFolder;
@@ -173,7 +175,7 @@ export class Explorer
             {
                 let value = files[iFile];
                 let currentFile:FileInfo = new FileInfo();
-                currentFile.path = `${this.currentPath}/${value}`
+                currentFile.path = path.resolve(`${this.currentPath}/${value}`)
                 currentFile.name = value;
                 try {
                     currentFile.stat = fs.lstatSync(currentFile.path)
@@ -215,8 +217,12 @@ export class Explorer
                     onclick:()=>{ addWindow(fileinfo.path) }
                 },
                 {
+                    title: "Ouvrir dans l'explorateur Windows", 
+                    onclick:()=>{ exec(`explorer.exe "${fileinfo.path}"`) }
+                },
+                {
                     title: "Propriétés", 
-                    onclick:()=>{ showProperties(path.resolve(fileinfo.path)) }
+                    onclick:()=>{ showProperties(fileinfo.path) }
                 }
             ];
         }
@@ -233,11 +239,11 @@ export class Explorer
                 },
                 {
                     title: "Ouvrir avec...", 
-                    onclick:()=>{ openWith(path.resolve(fileinfo.path)) }
+                    onclick:()=>{ openWith(fileinfo.path) }
                 },
                 {
                     title: "Propriétés", 
-                    onclick:()=>{ showProperties(path.resolve(fileinfo.path)) }
+                    onclick:()=>{ showProperties(fileinfo.path) }
                 }
             ];
         }
@@ -256,8 +262,57 @@ export class Explorer
             currentFile.icon = urlIcon;
         })
         utils.clearElement(this.explorer);
-        let nodeFile = utils.stringToDom(pugExplorerItem({lsFileInfos: this.lsFileInfos}));
-        this.explorer.append(nodeFile)
+        let nodeExplorer = utils.stringToDom(pugExplorer());
+        let elLsItems = (<HTMLElement>nodeExplorer).querySelector("#list-items")
+
+        this.lsFileInfos.forEach(currentFile=>{
+            let elem = utils.stringToDom(pugExpItem({fileinfo: currentFile})) as HTMLElement;
+            let elemFile = elem.childNodes[0] as HTMLElement;
+            elemFile.ondblclick = ()=>{
+                switch (currentFile.type) {
+                    case "dir":
+                        gotoFolder(currentFile.path)
+                        break;
+                    case "file":
+                        startFile(currentFile.path)
+                        break;
+                    default:
+                        remote.dialog.showMessageBoxSync({ 
+                            type: "error", 
+                            message: "Ce type de fichier n'est pas reconnu.", 
+                            title: "Type de fichier inconnu" 
+                        });
+                        break;
+                }
+            };
+            elemFile.onclick = (e) => {
+                if (e.ctrlKey==true)
+                {
+                    let t = this.lsFileSelected.findIndex(value=>value===currentFile)
+                    if (t>0)
+                        this.lsFileSelected.splice(t, 1)
+                    else
+                        this.lsFileSelected.push(currentFile)
+                    elemFile.classList.toggle("selected")
+                }
+                else 
+                {
+                    document.querySelectorAll(".explorer-item.selected").forEach((elem)=>{
+                        elem.classList.remove("selected")
+                    })
+                    elemFile.classList.add("selected")
+                    this.lsFileSelected = [currentFile]
+                }
+                
+            }
+            elemFile.onauxclick =(e)=>{ 
+                if (e.button==2)
+                    new MyMenu(Explorer.createMenuItem(currentFile)).popup() 
+            }
+            elLsItems.parentNode.appendChild(elemFile)
+        })
+        elLsItems.parentElement.removeChild(elLsItems)
+        this.explorer.append(nodeExplorer)
     }
 }
 

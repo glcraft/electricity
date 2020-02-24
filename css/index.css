@@ -98,6 +98,13 @@ body
 .explorer-list-item > td
 {
     color: gray;
+    padding: 0em 0.5em;
+}
+.explorer-list-item *
+{
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 .explorer-list-item div
 {
