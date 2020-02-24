@@ -8,6 +8,13 @@
   * [x] Chargement async
   * [x] Element taille prérempli (pour que la ligne ne se redimensionne pas après chargement)
 * [ ] Créer classe Action (ex: CopyAction, MoveAction, etc...)
+* [ ] Fenêtre frameless
+  * [ ] Bouger la fenêtre avec la souris
+  * [ ] Boutons de fenêtre à droite
+  * [ ] Paramètre: garder fenetre original
+  * [ ] Fenêtre style mac (boutons à gauche, cercle coloré)
+  * [ ] Paramètre: Choisir le style
+  * [ ] API: Personnaliser style 
 ## Fonctionnement de base
 * [ ] Entête
 * [ ] Pied
@@ -20,7 +27,7 @@
   * [ ] Copier/Couper/Coller
   * [ ] Renommer
   * [ ] Copier le chemin d'accès
-    * [ ] Paramétrage : quoted comme windows ou non
+    * [ ] Paramètre : quoted comme windows ou non
   * [ ] Supprimer
     * [ ] Dans la corbeille
     * [ ] Définitivement
