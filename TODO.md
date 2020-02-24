@@ -13,6 +13,7 @@
   * [ ] Boutons de fenêtre à droite
   * [ ] Paramètre: garder fenetre original
   * [ ] Fenêtre style mac (boutons à gauche, cercle coloré)
+        voir https://www.electronjs.org/docs/api/frameless-window#alternatives-sur-macos
   * [ ] Paramètre: Choisir le style
   * [ ] API: Personnaliser style 
 ## Fonctionnement de base
