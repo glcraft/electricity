@@ -39,7 +39,7 @@
   * [ ] 
 * [ ] Accès rapide/bookmark
 * [ ] Importer shell Windows (pour les programme comme 7zip, vscode...)
-* [ ] Chargement icône async
+* [x] Chargement icône async
 * [ ] Informations sur hover fichier/dossier
 * [ ] Colonne dans l'affichage liste
   * [ ] Date création
