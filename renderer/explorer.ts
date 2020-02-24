@@ -18,6 +18,7 @@ const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "ex
 
 export class FileInfo
 {
+    icon: string;
     path: string;
     type: "file"|"dir"|"unknown";
     name: string;
@@ -175,7 +176,7 @@ export class Explorer
                 currentFile.path = `${this.currentPath}/${value}`
                 currentFile.name = value;
                 try {
-                    currentFile.stat = fs.lstatSync(currentFile.path, {bigint: true})
+                    currentFile.stat = fs.lstatSync(currentFile.path)
                     if (currentFile.stat.isDirectory())
                         currentFile.type="dir"
                     else
@@ -250,61 +251,13 @@ export class Explorer
         let startFile=(path)=>{
             exec(`start "" "${path}"`)
         }
-        utils.clearElement(this.explorer);
         this.lsFileInfos.forEach((currentFile)=>{
-            let nodeFile = utils.stringToDom(pugExplorerItem({file:currentFile, img: urlWaiterPng}));
-            let elemFile = (nodeFile.childNodes[0] as HTMLElement)
-            iconManager.getIcon(currentFile, 24).then(urlIcon=>{
-                let newImg = document.createElement("img");
-                let img = elemFile.querySelector('img')
-                newImg.onload=()=>{
-                    img.replaceWith(newImg)
-                }
-                newImg.src = urlIcon
-            });
-            elemFile.ondblclick = ()=>{
-                switch (currentFile.type) {
-                    case "dir":
-                        gotoFolder(currentFile.path)
-                        break;
-                    case "file":
-                        startFile(currentFile.path)
-                        break;
-                    default:
-                        remote.dialog.showMessageBoxSync({ 
-                            type: "error", 
-                            message: "Ce type de fichier n'est pas reconnu.", 
-                            title: "Type de fichier inconnu" 
-                        });
-                        break;
-                }
-            };
-            elemFile.onclick = (e) => {
-                if (e.ctrlKey==true)
-                {
-                    let t = this.lsFileSelected.findIndex(value=>value===currentFile)
-                    if (t>0)
-                        this.lsFileSelected.splice(t, 1)
-                    else
-                        this.lsFileSelected.push(currentFile)
-                    elemFile.classList.toggle("selected")
-                }
-                else 
-                {
-                    document.querySelectorAll(".explorer-item.selected").forEach((elem)=>{
-                        elem.classList.remove("selected")
-                    })
-                    elemFile.classList.add("selected")
-                    this.lsFileSelected = [currentFile]
-                }
-                
-            }
-            elemFile.onauxclick =(e)=>{ 
-                if (e.button==2)
-                    new MyMenu(Explorer.createMenuItem(currentFile)).popup() 
-            }
-            this.explorer.append(nodeFile)
+            let urlIcon = iconManager.getIconSync(currentFile, 24);
+            currentFile.icon = urlIcon;
         })
+        utils.clearElement(this.explorer);
+        let nodeFile = utils.stringToDom(pugExplorerItem({lsFileInfos: this.lsFileInfos}));
+        this.explorer.append(nodeFile)
     }
 }
 

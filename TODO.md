@@ -41,10 +41,11 @@
 * [ ] Importer shell Windows (pour les programme comme 7zip, vscode...)
 * [x] Chargement icône async
 * [ ] Informations sur hover fichier/dossier
-* [ ] Colonne dans l'affichage liste
-  * [ ] Date création
-  * [ ] Date modification
-  * [ ] Taille fichier
+* [x] Colonne dans l'affichage liste
+  * [x] Date création
+  * [x] Date modification
+  * [x] Taille fichier
+  * [ ] Changer le style
 * [x] Onglets
   * [x] Bouton fermer
   * [x] Menus

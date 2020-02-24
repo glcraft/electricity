@@ -1,5 +1,6 @@
 :root {
     --col-background: white;
+    --col-written: black;
     --col-hovered: rgb(200, 212, 228);
     --col-border-hovered: rgb(146, 176, 218);
     --col-selected: rgb(173, 198, 245);
@@ -88,29 +89,24 @@ body
 }
 .explorer-item
 {
-    
     font-size: small;
 }
 .explorer-list
 {
     display: list-item;
 }
-.explorer-list-item
+.explorer-list-item > td
 {
-    display: flex;
+    color: gray;
 }
-.explorer-list-item > div
+.explorer-list-item div
 {
-    margin-left: 0.5em;
+    color: var(--col-written);
+    margin: auto 0.5em;
 }
-.explorer-list-item > img
+.explorer-list-item img
 {
     width: 2em;
-}
-.explorer-list-item > div
-{
-    margin-top: auto;
-    margin-bottom: auto;
 }
 
 .explorer-list-item[data-type="unknown"]

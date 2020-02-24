@@ -1,3 +1,12 @@
-.explorer-item.explorer-list-item.explorer-hoverable(data-type=file.type)
-    img(src=img)
-    div.item-name=file.name
+table
+    tr
+        th Nom
+        th Modifié le
+        th Créé le
+    each fileinfo in lsFileInfos
+        tr.explorer-item.explorer-list-item.explorer-hoverable(data-type=fileinfo.type)
+            td(style="display: flex;")
+                img(src=fileinfo.icon)
+                div.item-name=fileinfo.name
+            td=fileinfo.stat ? fileinfo.stat.mtime.toISOString() : ""
+            td=fileinfo.stat ? fileinfo.stat.birthtime.toISOString() : ""
