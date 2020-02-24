@@ -10,11 +10,11 @@
 {
     background-color: var(--col-background);
     border-color: black;
+    -webkit-app-region: none;
 }
 
 body
 {
-    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     margin: 0px;
     background-color: var(--col-background);
@@ -27,6 +27,7 @@ body
     background-color: var(--col-background);
     width: 100%;
     display: flex;
+    -webkit-app-region: drag;
 }
 .tab
 {

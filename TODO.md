@@ -9,7 +9,7 @@
   * [x] Element taille prérempli (pour que la ligne ne se redimensionne pas après chargement)
 * [ ] Créer classe Action (ex: CopyAction, MoveAction, etc...)
 * [ ] Fenêtre frameless
-  * [ ] Bouger la fenêtre avec la souris
+  * [x] Bouger la fenêtre avec la souris
   * [ ] Boutons de fenêtre à droite
   * [ ] Paramètre: garder fenetre original
   * [ ] Fenêtre style mac (boutons à gauche, cercle coloré)
