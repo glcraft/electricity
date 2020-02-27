@@ -1,4 +1,5 @@
 import {IconStorage, iconManager} from './icons'
+import * as utils from './utils'
 import * as vsicons from 'vscode-icons-js';
 import { FileInfo } from './explorer';
 import { extractIcon } from 'internal_module'
@@ -35,5 +36,9 @@ iconManager.registerIconStorage(new VSCodeIcons)
 iconManager.registerIconStorage(new ExecutableIcons)
 
 import './explorer'
+
+document.querySelector<HTMLImageElement>("#caption-close").src = utils.getResourceURL("caption/Close.svg")
+document.querySelector<HTMLImageElement>("#caption-max").src = utils.getResourceURL("caption/Maximize.svg")
+document.querySelector<HTMLImageElement>("#caption-reduce").src = utils.getResourceURL("caption/Reduce.svg")
 
 const firstPath = process.cwd()
