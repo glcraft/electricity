@@ -16,6 +16,7 @@ function initVars()
         width: 1920/4*3, 
         height: 1080/4*3,
         show: false,
+        frame: false,
         webPreferences: {
             nodeIntegration: true
         }

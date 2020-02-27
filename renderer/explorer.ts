@@ -14,10 +14,12 @@ import { iconManager } from './icons'
 const urlFolderPng=utils.getResourceURL("Folder.png")
 const urlWaiterPng=utils.getResourceURL("waiter.svg")
 
-const pugExplorerItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
+const pugExplorer = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "explorer.pug"))
+const pugExpItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
 
 export class FileInfo
 {
+    icon: string;
     path: string;
     type: "file"|"dir"|"unknown";
     name: string;
@@ -115,6 +117,7 @@ export class Explorer
     }
     goto(pathFolder: string)
     {
+        pathFolder = path.resolve(pathFolder)
         if (fs.existsSync(pathFolder) && this.currentPath!=pathFolder)
         {
             this.currentPath=pathFolder;
@@ -172,10 +175,10 @@ export class Explorer
             {
                 let value = files[iFile];
                 let currentFile:FileInfo = new FileInfo();
-                currentFile.path = `${this.currentPath}/${value}`
+                currentFile.path = path.resolve(`${this.currentPath}/${value}`)
                 currentFile.name = value;
                 try {
-                    currentFile.stat = fs.lstatSync(currentFile.path, {bigint: true})
+                    currentFile.stat = fs.lstatSync(currentFile.path)
                     if (currentFile.stat.isDirectory())
                         currentFile.type="dir"
                     else
@@ -214,8 +217,12 @@ export class Explorer
                     onclick:()=>{ addWindow(fileinfo.path) }
                 },
                 {
+                    title: "Ouvrir dans l'explorateur Windows", 
+                    onclick:()=>{ exec(`explorer.exe "${fileinfo.path}"`) }
+                },
+                {
                     title: "Propriétés", 
-                    onclick:()=>{ showProperties(path.resolve(fileinfo.path)) }
+                    onclick:()=>{ showProperties(fileinfo.path) }
                 }
             ];
         }
@@ -232,11 +239,11 @@ export class Explorer
                 },
                 {
                     title: "Ouvrir avec...", 
-                    onclick:()=>{ openWith(path.resolve(fileinfo.path)) }
+                    onclick:()=>{ openWith(fileinfo.path) }
                 },
                 {
                     title: "Propriétés", 
-                    onclick:()=>{ showProperties(path.resolve(fileinfo.path)) }
+                    onclick:()=>{ showProperties(fileinfo.path) }
                 }
             ];
         }
@@ -250,18 +257,17 @@ export class Explorer
         let startFile=(path)=>{
             exec(`start "" "${path}"`)
         }
-        utils.clearElement(this.explorer);
         this.lsFileInfos.forEach((currentFile)=>{
-            let nodeFile = utils.stringToDom(pugExplorerItem({file:currentFile, img: urlWaiterPng}));
-            let elemFile = (nodeFile.childNodes[0] as HTMLElement)
-            iconManager.getIcon(currentFile, 24).then(urlIcon=>{
-                let newImg = document.createElement("img");
-                let img = elemFile.querySelector('img')
-                newImg.onload=()=>{
-                    img.replaceWith(newImg)
-                }
-                newImg.src = urlIcon
-            });
+            let urlIcon = iconManager.getIconSync(currentFile, 24);
+            currentFile.icon = urlIcon;
+        })
+        utils.clearElement(this.explorer);
+        let nodeExplorer = utils.stringToDom(pugExplorer());
+        let elLsItems = (<HTMLElement>nodeExplorer).querySelector("#list-items")
+
+        this.lsFileInfos.forEach(currentFile=>{
+            let elem = utils.stringToDom(pugExpItem({fileinfo: currentFile})) as HTMLElement;
+            let elemFile = elem.childNodes[0] as HTMLElement;
             elemFile.ondblclick = ()=>{
                 switch (currentFile.type) {
                     case "dir":
@@ -303,8 +309,10 @@ export class Explorer
                 if (e.button==2)
                     new MyMenu(Explorer.createMenuItem(currentFile)).popup() 
             }
-            this.explorer.append(nodeFile)
+            elLsItems.parentNode.appendChild(elemFile)
         })
+        elLsItems.parentElement.removeChild(elLsItems)
+        this.explorer.append(nodeExplorer)
     }
 }
 

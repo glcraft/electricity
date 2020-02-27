@@ -1,5 +1,6 @@
 :root {
     --col-background: white;
+    --col-written: black;
     --col-hovered: rgb(200, 212, 228);
     --col-border-hovered: rgb(146, 176, 218);
     --col-selected: rgb(173, 198, 245);
@@ -9,11 +10,11 @@
 {
     background-color: var(--col-background);
     border-color: black;
+    -webkit-app-region: none;
 }
 
 body
 {
-    font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     font-family: "Segoe UI", Arial, Helvetica, sans-serif;
     margin: 0px;
     background-color: var(--col-background);
@@ -37,6 +38,7 @@ body
     background-color: var(--col-background);
     width: 100%;
     display: flex;
+    -webkit-app-region: drag;
 }
 .tab
 {
@@ -99,29 +101,31 @@ body
 }
 .explorer-item
 {
-    
     font-size: small;
 }
 .explorer-list
 {
     display: list-item;
 }
-.explorer-list-item
+.explorer-list-item > td
 {
-    display: flex;
+    color: gray;
+    padding: 0em 0.5em;
 }
-.explorer-list-item > div
+.explorer-list-item *
 {
-    margin-left: 0.5em;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
-.explorer-list-item > img
+.explorer-list-item div
+{
+    color: var(--col-written);
+    margin: auto 0.5em;
+}
+.explorer-list-item img
 {
     width: 2em;
-}
-.explorer-list-item > div
-{
-    margin-top: auto;
-    margin-bottom: auto;
 }
 
 .explorer-list-item[data-type="unknown"]

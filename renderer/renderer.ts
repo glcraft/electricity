@@ -27,7 +27,7 @@ class VSCodeIcons implements IconStorage
             img = vsicons.getIconForFile(itemInfo.name)
         else
             return undefined
-        if (/^default_/.test(img))
+        if (/^default_/.test(img) && itemInfo.type=="file")
             return undefined
         return `https://github.com/vscode-icons/vscode-icons/raw/master/icons/${img}?sanitize=true`
     }

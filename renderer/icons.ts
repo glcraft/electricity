@@ -50,14 +50,22 @@ class IconManager
     getIcon(itemInfo: FileInfo, iconsize: number): Promise<string>
     {
         return new Promise<string | undefined>((resolve, reject)=>{
-            for(let i=this.lsStorages.length-1;i>=0;--i)
-            {
-                let ic = this.lsStorages[i].getIcon(itemInfo, iconsize)
-                if (ic)
-                    resolve(ic);
-            }
-            reject("icon not found");
+            let res = this.getIconSync(itemInfo, iconsize);
+            if (!res)
+                reject("icon not found");
+            else
+                resolve(res);
         })
+    }
+    getIconSync(itemInfo: FileInfo, iconsize: number): string|undefined
+    {
+        for(let i=this.lsStorages.length-1;i>=0;--i)
+        {
+            let ic = this.lsStorages[i].getIcon(itemInfo, iconsize)
+            if (ic)
+                return ic;
+        }
+        return undefined;
     }
 }
 export let iconManager: IconManager=new IconManager();
