@@ -31,7 +31,25 @@ body
 {
     height: 100%;
     padding: 0px 10px;
+    transition: background-color ease 0.2s;
+}
+.caption-button > img
+{
+    height: 100%;
     filter: brightness(0);
+    transition: filter ease 0.2s;
+}
+.caption-button:hover
+{
+    background-color: lightgray;
+}
+#caption-close:hover
+{
+    background-color: red;
+}
+#caption-close:hover > img
+{
+    filter: brightness(100%);
 }
 #tab-bar 
 {
