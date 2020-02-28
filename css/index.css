@@ -32,6 +32,7 @@ body
     height: 100%;
     padding: 0px 10px;
     transition: background-color ease 0.2s;
+    display: inline-block;
 }
 .caption-button > img
 {
@@ -83,7 +84,6 @@ body
 .tab.selected
 {
     /* border: 1px solid var(--col-border-selected); */
-
     /* background-color: var(--col-selected); */
 }
 .tab-background
