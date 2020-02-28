@@ -1,7 +1,7 @@
 :root {
     --col-background: white;
     --col-written: black;
-    --col-hovered: rgb(200, 212, 228);
+    --col-hovered: rgb(219, 234, 255);
     --col-border-hovered: rgb(146, 176, 218);
     --col-selected: rgb(173, 198, 245);
     --col-border-selected: rgb(97, 152, 255);
@@ -162,6 +162,11 @@ body
 {
     background-color: var(--col-hovered);
     border: 1px solid var(--col-border-hovered); 
+}
+.explorer-list-item.selected
+{
+    border-color: var(--col-border-selected);
+    background-color: var(--col-selected);
 }
 .breadcrumb
 {
