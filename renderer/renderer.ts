@@ -36,9 +36,32 @@ iconManager.registerIconStorage(new VSCodeIcons)
 iconManager.registerIconStorage(new ExecutableIcons)
 
 import './explorer'
+import { remote } from 'electron';
 
-document.querySelector<HTMLImageElement>("#caption-close").src = utils.getResourceURL("caption/Close.svg")
-document.querySelector<HTMLImageElement>("#caption-max").src = utils.getResourceURL("caption/Maximize.svg")
-document.querySelector<HTMLImageElement>("#caption-reduce").src = utils.getResourceURL("caption/Reduce.svg")
-
+let elCapClose = document.querySelector<HTMLDivElement>("#caption-close");
+let elCapMax = document.querySelector<HTMLDivElement>("#caption-max");
+let elCapRed = document.querySelector<HTMLDivElement>("#caption-reduce");
+let elCapMaxImg = elCapMax.querySelector<HTMLImageElement>("img");
+elCapClose.querySelector<HTMLImageElement>("img").src = utils.getResourceURL("caption/Close.svg");
+elCapMax.querySelector<HTMLImageElement>("img").src = utils.getResourceURL("caption/Maximize.svg");
+elCapRed.querySelector<HTMLImageElement>("img").src = utils.getResourceURL("caption/Reduce.svg");
+let currentWin = remote.getCurrentWindow()
+elCapClose.onclick=e=>{
+    currentWin.close();
+}
+elCapMax.onclick=e=>{
+    if (!currentWin.isMaximized())
+        currentWin.maximize();
+    else
+        currentWin.unmaximize();
+}
+elCapRed.onclick=e=>{
+    currentWin.minimize();
+}
+currentWin.on("maximize", e=>{
+    elCapMaxImg.src = utils.getResourceURL("caption/Minimize.svg");
+})
+currentWin.on("unmaximize", e=>{
+    elCapMaxImg.src = utils.getResourceURL("caption/Maximize.svg");
+})
 const firstPath = process.cwd()
