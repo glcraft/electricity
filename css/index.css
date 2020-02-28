@@ -22,6 +22,17 @@ body
     flex-flow: column;
     height: 100vh;
 }
+#caption-bar
+{
+    height:30px;
+    -webkit-user-select: none;
+}
+.caption-button
+{
+    height: 100%;
+    padding: 0px 10px;
+    filter: brightness(0);
+}
 #tab-bar 
 {
     background-color: var(--col-background);
