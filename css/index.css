@@ -125,6 +125,10 @@ body
 {
     display: list-item;
 }
+.explorer table
+{
+    border-spacing: 0px;
+}
 .explorer-list-item > td
 {
     color: gray;
