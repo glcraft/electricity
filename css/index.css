@@ -218,10 +218,11 @@ body
 }
 #address-bar
 {
-    border: 1px solid gray;
+    border: solid gray;
     list-style: none;
     margin: 0px;
     display: flex;
+    border-width: 1px 0px;
 }
 #address
 {
