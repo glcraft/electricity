@@ -8,18 +8,16 @@
   * [x] Chargement async
   * [x] Element taille prérempli (pour que la ligne ne se redimensionne pas après chargement)
 * [ ] Créer classe Action (ex: CopyAction, MoveAction, etc...)
-* [ ] Fenêtre frameless
+* [x] Fenêtre frameless
   * [x] Bouger la fenêtre avec la souris
-  * [ ] Boutons de fenêtre à droite
-  * [ ] Paramètre: garder fenetre original
-  * [ ] Fenêtre style mac (boutons à gauche, cercle coloré)
+  * [x] Boutons de fenêtre à droite
+  * [ ] MacOS: Fenêtre style mac (boutons à gauche, cercle coloré)
         voir https://www.electronjs.org/docs/api/frameless-window#alternatives-sur-macos
-  * [ ] Paramètre: Choisir le style
-  * [ ] API: Personnaliser style 
 ## Fonctionnement de base
 * [ ] Entête
 * [ ] Pied
   * [ ] Nombres d'éléments
+  * [ ] Nombres d'éléments sélectionnés
   * [ ] Taches courante 
     * [ ] Copier/Coller
 * [ ] Fonctions usuelles
@@ -34,6 +32,7 @@
     * [ ] Définitivement
   * [ ] Nouveau fichier
     * [ ] Modèles
+  * [ ] Informations sur hover fichier/dossier
 * [x] Liste dossier dans flèche breadcrumb
   * [x] Icône à gauche de l'item 
 * [ ] Drag drop
@@ -48,7 +47,7 @@
 * [ ] Accès rapide/bookmark
 * [ ] Importer shell Windows (pour les programme comme 7zip, vscode...)
 * [x] Chargement icône async
-* [ ] Informations sur hover fichier/dossier
+
 * [x] Colonne dans l'affichage liste
   * [x] Date création
   * [x] Date modification
