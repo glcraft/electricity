@@ -26,6 +26,7 @@ body
 {
     height:30px;
     -webkit-user-select: none;
+    border-bottom: 1px solid black;
 }
 .caption-button
 {
@@ -67,7 +68,6 @@ body
     width: 200px;
     text-align: center;
 
-    border: 1px solid rgba(255, 255, 255, 0);
     border-top: 3px solid rgba(0, 0, 0, 0.5);
     border-right: 0.5px solid rgba(0, 0, 0, 0.5);
     /* border-radius: 3px 3px 0px 0px; */
@@ -83,8 +83,8 @@ body
 }
 .tab.selected
 {
-    /* border: 1px solid var(--col-border-selected); */
-    /* background-color: var(--col-selected); */
+    border-top: 3px solid var(--col-border-selected);
+    background-color: var(--col-selected);
 }
 .tab-background
 {
@@ -223,11 +223,10 @@ body
 }
 #address-bar
 {
-    border: solid gray;
     list-style: none;
     margin: 0px;
     display: flex;
-    border-width: 1px 0px;
+    border-bottom: 1px solid gray;
 }
 #address
 {
