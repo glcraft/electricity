@@ -16,6 +16,7 @@ const urlWaiterPng=utils.getResourceURL("waiter.svg")
 
 const pugExplorer = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "explorer.pug"))
 const pugExpItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
+const pugExpContainer = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "explorer-container.pug"))
 
 export class FileInfo
 {
@@ -84,6 +85,8 @@ export class Explorer
     private menu:MyMenu;
     private lsFileInfos: Array<FileInfo>;
     private lsFileSelected: Array<FileInfo>;
+    public static sassExplorer: HTMLElement;
+    public static container: HTMLElement;
     
     constructor(expElem?: HTMLElement)
     {
@@ -93,6 +96,19 @@ export class Explorer
             this.explorer=utils.pugDom('.explorer.explorer-list(data-type="list")') as HTMLElement;
         this.tab = new Tab(this)
         this.history.onChangeHistory=(data)=>this.gotoForHistory(data)
+    }
+    static setContainer()
+    {
+        let elContainer = document.querySelector("#container")
+        let fchild = document.querySelector("#container").firstChild;
+        if (!fchild)
+        {
+            elContainer.appendChild(Explorer.container)
+        }
+        else if(fchild != Explorer.container)
+        {
+            fchild.replaceWith(Explorer.container)
+        }
     }
     setTabName(newName: string)
     {
@@ -316,9 +332,12 @@ export class Explorer
     }
 }
 
+Explorer.container = utils.stringToDom(pugExpContainer()).firstChild as HTMLElement
+Explorer.sassExplorer = Explorer.container.querySelector("#sass-explorer")
+bc.setAddressBar(Explorer.container.querySelector("#address-bar"))
+
 let explorers: Array<Explorer> = new Array<Explorer>();
 let currentExplorer:Explorer;
-let sassExplorer = document.getElementById("sass-explorer")
 
 export function getPath(): string
 {
@@ -342,8 +361,9 @@ export function up()
 }
 export function setCurrentExplorer(exp: Explorer|number)
 {
-    if (sassExplorer.hasChildNodes())
-        sassExplorer.removeChild(currentExplorer.getExplorerElement())
+    Explorer.setContainer()
+    if (Explorer.sassExplorer.hasChildNodes())
+        Explorer.sassExplorer.removeChild(currentExplorer.getExplorerElement())
     if (currentExplorer)
         currentExplorer.getTab().unselect()
     if (typeof exp === "number")
@@ -351,7 +371,7 @@ export function setCurrentExplorer(exp: Explorer|number)
     else
         currentExplorer = exp;
         currentExplorer.getTab().select()
-    sassExplorer.appendChild(currentExplorer.getExplorerElement())
+    Explorer.sassExplorer.appendChild(currentExplorer.getExplorerElement())
 }
 export function getCurrentExplorer(): Explorer
 {
@@ -393,7 +413,7 @@ let query = querystring.parse((global as any).location.search)
 let data = JSON.parse(query['?data'] as string)
 if (data.paths)
     data.paths.forEach((p)=>addExplorer(p))
-let navElem=document.getElementById("nav");
+let navElem=Explorer.container.querySelector("#nav");
 
 ["previous", "next", "up"].forEach(element => {
     let urlimg = utils.getResourceURL(`nav/${element}.png`)
@@ -401,4 +421,7 @@ let navElem=document.getElementById("nav");
     nodeNavBut.onclick=exports[element]
     navElem.appendChild(nodeNavBut)
 });
-setCurrentExplorer(0)
+
+
+
+// setCurrentExplorer(0)

@@ -7,12 +7,16 @@ import { iconManager } from './icons'
 
 const pugBCItem = pug.compileFile(path.join(utils.renderer_path.views, "breadcrumb", "item.pug"))
 const pugBCLSItem = pug.compileFile(path.join(utils.renderer_path.views, "breadcrumb", "lsitem.pug"))
-
+let nodeAdressBar: HTMLElement;
 const urlFolderPng=utils.getResourceURL("Folder.png")
+export function setAddressBar(elAddr: HTMLElement)
+{
+    nodeAdressBar = elAddr;
+}
 
 export function update(currentPath: string)
 {
-    let nodeBC = document.getElementById("breadcrumb-explorer")
+    let nodeBC = nodeAdressBar.querySelector("#breadcrumb-explorer")
     utils.clearElement(nodeBC)
     const parsedPath = path.parse(currentPath)
     let BCFields: string[]=parsedPath.dir.split(/[\\/]/g);
@@ -76,7 +80,7 @@ export function update(currentPath: string)
         nodeBC.append(nodeBCItem)
     }
     BCFields.forEach(createBCItem)
-    let addressTap=document.getElementById("address-tap")
+    let addressTap=nodeAdressBar.querySelector("#address-tap")
     addressTap.onclick=()=>{
         utils.clearElement(nodeBC)
         let inputElem=document.createElement("input")
