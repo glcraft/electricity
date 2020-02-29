@@ -197,7 +197,7 @@ body
     background-color: var(--col-hovered);
     border: 1px solid var(--col-border-hovered); 
 }
-.bc-sep
+.bc-sep>img
 {
     width: 0.75em;
 }

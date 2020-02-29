@@ -80,7 +80,7 @@ export function update(currentPath: string)
         nodeBC.append(nodeBCItem)
     }
     BCFields.forEach(createBCItem)
-    let addressTap=nodeAdressBar.querySelector("#address-tap")
+    let addressTap:HTMLElement=nodeAdressBar.querySelector("#address-tap")
     addressTap.onclick=()=>{
         utils.clearElement(nodeBC)
         let inputElem=document.createElement("input")
