@@ -43,7 +43,11 @@
   * [ ] Liste disque
 * [ ] Paramétrages
   * [ ] Container
-  * [ ] 
+* [ ] Visionneur de fichier
+  * [ ] PDF
+  * [ ] Word
+  * [ ] Excel
+  * [ ] Texte/Code (utiliser Monaco)
 * [ ] Accès rapide/bookmark
 * [ ] Importer shell Windows (pour les programme comme 7zip, vscode...)
 * [x] Chargement icône async
