@@ -267,6 +267,12 @@ export class Explorer
             return makeFolderConfig(fileinfo);
         else if (fileinfo.type=="file")
             return makeFileConfig(fileinfo);
+        else 
+            return [
+                {
+                    title: "Inconnu",
+                    enabled:false
+                }];
     }
     protected updateExplorerElements()
     {
