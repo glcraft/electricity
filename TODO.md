@@ -8,6 +8,7 @@
   * [x] Chargement async
   * [x] Element taille prérempli (pour que la ligne ne se redimensionne pas après chargement)
 * [ ] Créer classe Action (ex: CopyAction, MoveAction, etc...)
+* [ ] Corriger caption bar (Boutons qui dépasse du cadre)
 * [x] Fenêtre frameless
   * [x] Bouger la fenêtre avec la souris
   * [x] Boutons de fenêtre à droite
