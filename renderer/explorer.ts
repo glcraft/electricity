@@ -16,7 +16,7 @@ const urlWaiterPng=utils.getResourceURL("waiter.svg")
 
 const pugExplorer = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "explorer.pug"))
 const pugExpItem = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "list", "item.pug"))
-const pugExpContainer = pug.compileFile(path.join(utils.renderer_path.views, "explorers", "explorer-container.pug"))
+const pugExpContainer = pug.compileFile(path.join(utils.renderer_path.views, "containers", "explorer-container.pug"))
 
 export class FileInfo
 {
