@@ -15,44 +15,30 @@
   * [ ] MacOS: Fenêtre style mac (boutons à gauche, cercle coloré)
         voir https://www.electronjs.org/docs/api/frameless-window#alternatives-sur-macos
 ## Fonctionnement de base
-* [ ] Entête
-* [ ] Pied
-  * [ ] Nombres d'éléments
-  * [ ] Nombres d'éléments sélectionnés
-  * [ ] Taches courante 
-    * [ ] Copier/Coller
 * [ ] Fonctions usuelles
+  * [ ] Menus
+    * [ ] Copier/Couper/Coller
+    * [ ] Renommer
+    * [ ] Copier le chemin d'accès
+      * [ ] Paramètre : quoted comme windows ou non 
+    * [ ] Supprimer
+      * [ ] Dans la corbeille
+      * [ ] Définitivement
+    * [ ] Nouveau fichier
+      * [ ] Modèles
   * [ ] Rechercher dans le dossier courant
   * [ ] Rechercher récursivement
-  * [ ] Copier/Couper/Coller
-  * [ ] Renommer
-  * [ ] Copier le chemin d'accès
-    * [ ] Paramètre : quoted comme windows ou non
-  * [ ] Supprimer
-    * [ ] Dans la corbeille
-    * [ ] Définitivement
-  * [ ] Nouveau fichier
-    * [ ] Modèles
   * [ ] Informations sur hover fichier/dossier
 * [x] Liste dossier dans flèche breadcrumb
   * [x] Icône à gauche de l'item 
 * [ ] Drag drop
-* [ ] Container (Explorer est un type de container)
-* [ ] Explorateur particulier
-  * [ ] Police d'écriture
-  * [ ] Accueil
-  * [ ] Liste disque
+* [x] Container (Explorer est un type de container)
 * [ ] Paramétrages
   * [ ] Container
-* [ ] Visionneur de fichier
-  * [ ] PDF
-  * [ ] Word
-  * [ ] Excel
-  * [ ] Texte/Code (utiliser Monaco)
-* [ ] Accès rapide/bookmark
+  * [ ] Cacher les fichiers/dossiers cachés
+  * [ ] Montrer les extensions
 * [ ] Importer shell Windows (pour les programme comme 7zip, vscode...)
 * [x] Chargement icône async
-
 * [x] Colonne dans l'affichage liste
   * [x] Date création
   * [x] Date modification
@@ -65,6 +51,23 @@
     * [x] Dupliquer
     * [x] Ouvrir dans une nouvelle fenêtre
 * [ ] Raccourcis clavier
+## Fonctionnalités secondaires à ajouter
+* [ ] Accès rapide/bookmark
+* [ ] Visionneur de fichier
+  * [ ] PDF
+  * [ ] Word
+  * [ ] Excel
+  * [ ] Texte/Code (utiliser Monaco)
+* [ ] Entête
+* [ ] Pied
+  * [ ] Nombres d'éléments
+  * [ ] Nombres d'éléments sélectionnés
+  * [ ] Taches courantes
+    * [ ] Copier/Coller
+* [ ] Explorateur particulier
+  * [ ] Police d'écriture
+  * [ ] Accueil
+  * [ ] Liste disque
 * [ ] ? Macros
 ## API
 * [ ] Fichier de langue
