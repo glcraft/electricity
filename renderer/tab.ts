@@ -1,8 +1,9 @@
 import{Explorer,addExplorer,addWindow,setCurrentExplorer,getCurrentExplorer} from "./explorer"
 import * as path from 'path'
-import {MyMenu} from './mymenu'
+// import {MyMenu} from './mymenu'
 import * as pug from 'pug'
 import * as utils from './utils'
+import { remote } from "electron";
 
 
 
@@ -42,20 +43,23 @@ export class Tab
                 this.close();
             if (e.button==2)
             {
-                new MyMenu([
-                    {
-                        title: "Fermer",
-                        onclick:()=>{ this.close(); }
-                    },
-                    {
-                        title: "Dupliquer", 
-                        onclick:()=>{ this.duplicate(); }
-                    },
-                    {
-                        title: "Ouvrir dans une nouvelle fenêtre", 
-                        onclick:()=>{ this.newWindow(); }
-                    }
-                ]).popup();
+                let menu = new remote.Menu();
+                menu.append(new remote.MenuItem({
+                    type:"normal",
+                    label:"Fermer",
+                    click:()=>{ this.close(); }
+                }))
+                menu.append(new remote.MenuItem({
+                    type:"normal",
+                    label:"Dupliquer",
+                    click:()=>{ this.duplicate(); }
+                }))
+                menu.append(new remote.MenuItem({
+                    type:"normal",
+                    label:"Ouvrir dans une nouvelle fenêtre",
+                    click:()=>{ this.newWindow(); }
+                }))
+                menu.popup();
             }
         }
         

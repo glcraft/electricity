@@ -5,7 +5,7 @@ import * as pug from 'pug'
 import { remote } from 'electron'
 import { extractIcon, openWith, showProperties } from 'internal_module'
 import { exec } from "child_process"
-import { MyMenu } from "./mymenu"
+import { MyMenuRegister } from "./mymenu"
 import * as bc from './breadcrumb'
 import * as utils from './utils'
 import {Tab} from './tab'
@@ -76,26 +76,75 @@ class ExplorerHistory {
     // }
 }
 
-export class Explorer
+export class Explorer extends MyMenuRegister
 {
     private explorer: HTMLElement;
     private tab: Tab;
     private currentPath: string;
     private history:ExplorerHistory = new ExplorerHistory();
-    private menu:MyMenu;
+    // private menu:MyMenu;
     private lsFileInfos: Array<FileInfo>;
-    private lsFileSelected: Array<FileInfo>;
+    private lsFileSelected: Array<FileInfo> =[];
     public static sassExplorer: HTMLElement;
     public static container: HTMLElement;
     
     constructor(expElem?: HTMLElement)
     {
+        super()
         if (expElem)
             this.explorer=expElem
         else
             this.explorer=utils.pugDom('.explorer.explorer-list(data-type="list")') as HTMLElement;
         this.tab = new Tab(this)
         this.history.onChangeHistory=(data)=>this.gotoForHistory(data)
+        this.registerMenuProvider({
+            type: ["dir"],
+            menu: [{
+                title: "Ouvrir",
+                onclick: (fileInfos: FileInfo[]) => { gotoFolder(fileInfos[0].path) }
+            },
+            {
+                title: "Ouvrir dans un nouvel onglet",
+                onclick: (fileInfos: FileInfo[]) => { addExplorer(fileInfos[0].path, true) }
+            },
+            {
+                title: "Ouvrir dans une nouvelle fenêtre",
+                onclick: (fileInfos: FileInfo[]) => { addWindow(fileInfos[0].path) }
+            },
+            {
+                title: "Ouvrir dans l'explorateur Windows",
+                onclick: (fileInfos: FileInfo[]) => { exec(`explorer.exe "${fileInfos[0].path}"`) }
+            }]
+        })
+        this.registerMenuProvider({menu:[{title:"Plusieurs dossiers"}], type:["dirs"]})
+        this.registerMenuProvider({
+            type: ["file"], 
+            menu: [
+                {
+                    title: "Fichier",
+                    enabled: false
+                },
+                {},
+                {
+                    title: "Ouvrir",
+                    onclick: (fileInfos: FileInfo[]) => { exec(`start "" "${fileInfos[0].path}"`) }
+                },
+                {
+                    title: "Ouvrir avec...",
+                    onclick: (fileInfos: FileInfo[]) => { openWith(fileInfos[0].path) }
+                }
+            ]
+        })
+        this.registerMenuProvider({menu:[{title:"Plusieurs fichiers"}], type:["files"]})
+        this.registerMenuProvider({menu:[{title:"Plusieurs items"}], type:["several"]})
+        this.registerMenuProvider({menu:[{title:"Rien"}], type:["nothing"]})
+        this.registerMenuProvider({
+            type: ["dir", "file"],
+            menu: [{
+                title: "Propriétés",
+                onclick: (fileInfos: FileInfo[]) => { showProperties(fileInfos[0].path) }
+            }]
+        })
     }
     static setContainer()
     {
@@ -173,6 +222,7 @@ export class Explorer
             setCurrentExplorer(id-1)
         }
     }
+    // selectItem(fi: FileInfo, )
     update()
     {
         let t: Array<number>;
@@ -274,6 +324,26 @@ export class Explorer
                     enabled:false
                 }];
     }
+    private selectItem(elItem: HTMLElement, fi: FileInfo, add: boolean = false)
+    {
+        if (add)
+        {
+            let t = this.lsFileSelected.findIndex(value=>value===fi)
+            if (t>0)
+                this.lsFileSelected.splice(t, 1)
+            else
+                this.lsFileSelected.push(fi)
+            elItem.classList.toggle("selected")
+        }
+        else
+        {
+            document.querySelectorAll(".explorer-item.selected").forEach((elem)=>{
+                elem.classList.remove("selected")
+            })
+            elItem.classList.add("selected")
+            this.lsFileSelected = [fi]
+        }
+    }
     protected updateExplorerElements()
     {
         let startFile=(path)=>{
@@ -286,7 +356,7 @@ export class Explorer
         utils.clearElement(this.explorer);
         let nodeExplorer = utils.stringToDom(pugExplorer());
         let elLsItems = (<HTMLElement>nodeExplorer).querySelector("#list-items")
-
+        let currentExp = this;
         this.lsFileInfos.forEach(currentFile=>{
             let elem = utils.stringToDom(pugExpItem({fileinfo: currentFile})) as HTMLElement;
             let elemFile = elem.childNodes[0] as HTMLElement;
@@ -308,28 +378,16 @@ export class Explorer
                 }
             };
             elemFile.onclick = (e) => {
-                if (e.ctrlKey==true)
-                {
-                    let t = this.lsFileSelected.findIndex(value=>value===currentFile)
-                    if (t>0)
-                        this.lsFileSelected.splice(t, 1)
-                    else
-                        this.lsFileSelected.push(currentFile)
-                    elemFile.classList.toggle("selected")
-                }
-                else 
-                {
-                    document.querySelectorAll(".explorer-item.selected").forEach((elem)=>{
-                        elem.classList.remove("selected")
-                    })
-                    elemFile.classList.add("selected")
-                    this.lsFileSelected = [currentFile]
-                }
-                
+                this.selectItem(elemFile,currentFile,e.ctrlKey)
             }
+            
             elemFile.onauxclick =(e)=>{ 
                 if (e.button==2)
-                    new MyMenu(Explorer.createMenuItem(currentFile)).popup() 
+                {
+                    if (!this.lsFileSelected.includes(currentFile))
+                        this.selectItem(elemFile,currentFile,e.ctrlKey)
+                    this.popupMenu(this.lsFileSelected)
+                }
             }
             elLsItems.parentNode.appendChild(elemFile)
         })
