@@ -121,11 +121,6 @@ export class Explorer extends MyMenuRegister
             type: ["file"], 
             menu: [
                 {
-                    title: "Fichier",
-                    enabled: false
-                },
-                {},
-                {
                     title: "Ouvrir",
                     onclick: (fileInfos: FileInfo[]) => { exec(`start "" "${fileInfos[0].path}"`) }
                 },
@@ -260,69 +255,6 @@ export class Explorer extends MyMenuRegister
             
             this.updateExplorerElements();
         });
-    }
-    static createMenuItem(fileinfo:FileInfo)
-    {
-        let makeFolderConfig=(fileinfo:FileInfo)=>{
-            return [
-                {
-                    title: "Dossier", 
-                    enabled:false
-                },
-                {},
-                {
-                    title: "Ouvrir", 
-                    onclick:()=>{ gotoFolder(fileinfo.path) }
-                },
-                {
-                    title: "Ouvrir dans un nouvel onglet", 
-                    onclick:()=>{ addExplorer(fileinfo.path, true) }
-                },
-                {
-                    title: "Ouvrir dans une nouvelle fenêtre", 
-                    onclick:()=>{ addWindow(fileinfo.path) }
-                },
-                {
-                    title: "Ouvrir dans l'explorateur Windows", 
-                    onclick:()=>{ exec(`explorer.exe "${fileinfo.path}"`) }
-                },
-                {
-                    title: "Propriétés", 
-                    onclick:()=>{ showProperties(fileinfo.path) }
-                }
-            ];
-        }
-        let makeFileConfig=(fileinfo:FileInfo)=>{
-            return [
-                {
-                    title: "Fichier",
-                    enabled:false
-                },
-                {},
-                {
-                    title: "Ouvrir", 
-                    onclick:()=>{ exec(`start "" "${fileinfo.path}"`) }
-                },
-                {
-                    title: "Ouvrir avec...", 
-                    onclick:()=>{ openWith(fileinfo.path) }
-                },
-                {
-                    title: "Propriétés", 
-                    onclick:()=>{ showProperties(fileinfo.path) }
-                }
-            ];
-        }
-        if (fileinfo.type=="dir")
-            return makeFolderConfig(fileinfo);
-        else if (fileinfo.type=="file")
-            return makeFileConfig(fileinfo);
-        else 
-            return [
-                {
-                    title: "Inconnu",
-                    enabled:false
-                }];
     }
     private selectItem(elItem: HTMLElement, fi: FileInfo, add: boolean = false)
     {
