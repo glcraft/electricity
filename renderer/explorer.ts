@@ -108,7 +108,7 @@ export class Explorer extends MyMenuRegister
                 onclick: (fileInfos: FileInfo[]) => { addExplorer(fileInfos[0].path, true) }
             },
             {
-                title: "Ouvrir dans une nouvelle fenêtre",
+                title: "Ouvrir dans une nouvelle fenÃªtre",
                 onclick: (fileInfos: FileInfo[]) => { addWindow(fileInfos[0].path) }
             },
             {
@@ -136,13 +136,14 @@ export class Explorer extends MyMenuRegister
         this.registerMenuProvider({
             type: ["dir", "file"],
             menu: [{
-                title: "Propriétés",
+                title: "PropriÃ©tÃ©s",
                 onclick: (fileInfos: FileInfo[]) => { showProperties(fileInfos[0].path) }
             }]
         })
         this.explorer.onauxclick=e=>{
             if (e.button==2)
             {
+                this.selectItem("reset")
                 this.popupMenu([])
             }
         }
@@ -223,7 +224,6 @@ export class Explorer extends MyMenuRegister
             setCurrentExplorer(id-1)
         }
     }
-    // selectItem(fi: FileInfo, )
     update()
     {
         let t: Array<number>;
@@ -262,24 +262,30 @@ export class Explorer extends MyMenuRegister
             this.updateExplorerElements();
         });
     }
-    private selectItem(elItem: HTMLElement, fi: FileInfo, add: boolean = false)
+    private selectItem(type: "normal"|"add"|"reset",item?:{element: HTMLElement, fileinfo: FileInfo})
     {
-        if (add)
+        switch (type)
         {
-            let t = this.lsFileSelected.findIndex(value=>value===fi)
-            if (t>0)
-                this.lsFileSelected.splice(t, 1)
-            else
-                this.lsFileSelected.push(fi)
-            elItem.classList.toggle("selected")
-        }
-        else
-        {
-            document.querySelectorAll(".explorer-item.selected").forEach((elem)=>{
-                elem.classList.remove("selected")
-            })
-            elItem.classList.add("selected")
-            this.lsFileSelected = [fi]
+            case "add":
+                let t = this.lsFileSelected.findIndex(value=>value===item.fileinfo)
+                if (t>0)
+                    this.lsFileSelected.splice(t, 1)
+                else
+                    this.lsFileSelected.push(item.fileinfo)
+                item.element.classList.toggle("selected")
+                break;
+            case "normal":
+                document.querySelectorAll(".explorer-item.selected").forEach((elem)=>{
+                    elem.classList.remove("selected")
+                })
+                item.element.classList.add("selected")
+                this.lsFileSelected = [item.fileinfo]
+                break;
+            case "reset":
+                document.querySelectorAll(".explorer-item.selected").forEach((elem)=>{
+                    elem.classList.remove("selected")
+                })
+                break;
         }
     }
     protected updateExplorerElements()
@@ -316,14 +322,14 @@ export class Explorer extends MyMenuRegister
                 }
             };
             elemFile.onclick = (e) => {
-                this.selectItem(elemFile,currentFile,e.ctrlKey)
+                this.selectItem(e.ctrlKey ? "add" : "normal", { element: elemFile, fileinfo: currentFile })
             }
             
             elemFile.onauxclick =(e)=>{ 
                 if (e.button==2)
                 {
                     if (!this.lsFileSelected.includes(currentFile))
-                        this.selectItem(elemFile,currentFile,e.ctrlKey)
+                        this.selectItem(e.ctrlKey ? "add" : "normal", { element: elemFile, fileinfo: currentFile })
                     this.popupMenu(this.lsFileSelected)
                     e.stopPropagation()
                 }
