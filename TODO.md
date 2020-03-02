@@ -15,6 +15,7 @@
   * [ ] MacOS: Fenêtre style mac (boutons à gauche, cercle coloré)
         voir https://www.electronjs.org/docs/api/frameless-window#alternatives-sur-macos
 * [x] Menu provider
+* [x] Cliquer sur "rien"
 ## Fonctionnement de base
 * [ ] Fonctions usuelles
   * [ ] Menus

@@ -112,11 +112,13 @@ body
 }
 #container
 {
+    height: 100%;
     display: flex;
     overflow-y: auto;
 }
 #sass-explorer
 {
+    height: 100%;
     flex: 1;
     overflow-y: auto;
 }
