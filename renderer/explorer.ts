@@ -140,6 +140,12 @@ export class Explorer extends MyMenuRegister
                 onclick: (fileInfos: FileInfo[]) => { showProperties(fileInfos[0].path) }
             }]
         })
+        this.explorer.onauxclick=e=>{
+            if (e.button==2)
+            {
+                this.popupMenu([])
+            }
+        }
     }
     static setContainer()
     {
@@ -319,6 +325,7 @@ export class Explorer extends MyMenuRegister
                     if (!this.lsFileSelected.includes(currentFile))
                         this.selectItem(elemFile,currentFile,e.ctrlKey)
                     this.popupMenu(this.lsFileSelected)
+                    e.stopPropagation()
                 }
             }
             elLsItems.parentNode.appendChild(elemFile)
