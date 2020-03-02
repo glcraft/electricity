@@ -1,4 +1,4 @@
-import * as path from 'path'
+﻿import * as path from 'path'
 import * as querystring from 'querystring'
 import * as fs from 'fs'
 import * as pug from 'pug'
@@ -108,7 +108,7 @@ export class Explorer extends MyMenuRegister
                 onclick: (fileInfos: FileInfo[]) => { addExplorer(fileInfos[0].path, true) }
             },
             {
-                title: "Ouvrir dans une nouvelle fenÃªtre",
+                title: "Ouvrir dans une nouvelle fenêtre",
                 onclick: (fileInfos: FileInfo[]) => { addWindow(fileInfos[0].path) }
             },
             {
@@ -136,7 +136,7 @@ export class Explorer extends MyMenuRegister
         this.registerMenuProvider({
             type: ["dir", "file"],
             menu: [{
-                title: "PropriÃ©tÃ©s",
+                title: "Propriétés",
                 onclick: (fileInfos: FileInfo[]) => { showProperties(fileInfos[0].path) }
             }]
         })
@@ -146,6 +146,9 @@ export class Explorer extends MyMenuRegister
                 this.selectItem("reset")
                 this.popupMenu([])
             }
+        }
+        this.explorer.onclick=e=>{
+            this.selectItem("reset")
         }
     }
     static setContainer()
@@ -323,6 +326,7 @@ export class Explorer extends MyMenuRegister
             };
             elemFile.onclick = (e) => {
                 this.selectItem(e.ctrlKey ? "add" : "normal", { element: elemFile, fileinfo: currentFile })
+                e.stopPropagation()
             }
             
             elemFile.onauxclick =(e)=>{ 
