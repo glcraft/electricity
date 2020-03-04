@@ -1,10 +1,6 @@
 import { app, BrowserWindow } from 'electron';
 import {ApplicationPath} from "./ApplicationPath";
 import * as path from 'path';
-import * as nodeAbi from 'node-abi'
-
-console.log (`node ABI: ${nodeAbi.getAbi('12.14.0', 'node')}`)
-console.log (`electron ABI: ${nodeAbi.getAbi('7.1.11', 'electron')}`)
 
 let mainWindow: BrowserWindow;
 let appPaths: ApplicationPath;
