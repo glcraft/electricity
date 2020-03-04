@@ -71,5 +71,8 @@
   * [ ] Liste disque
 * [ ] ? Macros
 ## API
-* [ ] Fichier de langue
 * [ ] Custom icon (voir [Technique](#technique))
+* [ ] Packs de ressources 
+  * [ ] Fichier descriptif
+  * [ ] Fichier de langue
+  * [ ] Ressources web (HTML/CSS/Jade...)
