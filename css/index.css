@@ -157,7 +157,7 @@ body
     width: 2em;
 }
 
-.explorer-list-item[data-type="unknown"]
+.explorer-list-item[data-type="unknown"] div
 {
     color: gray;
 }
