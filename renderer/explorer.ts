@@ -367,6 +367,7 @@ export function setCurrentExplorer(exp: Explorer|number)
     else
         currentExplorer = exp;
         currentExplorer.getTab().select()
+    bc.update(currentExplorer.getPath());
     Explorer.sassExplorer.appendChild(currentExplorer.getExplorerElement())
 }
 export function getCurrentExplorer(): Explorer
