@@ -366,7 +366,7 @@ export function setCurrentExplorer(exp: Explorer|number)
         currentExplorer = explorers[exp]
     else
         currentExplorer = exp;
-        currentExplorer.getTab().select()
+    currentExplorer.getTab().select()
     bc.update(currentExplorer.getPath());
     Explorer.sassExplorer.appendChild(currentExplorer.getExplorerElement())
 }
@@ -421,4 +421,4 @@ let navElem=Explorer.container.querySelector("#nav");
 
 
 
-// setCurrentExplorer(0)
+setCurrentExplorer(0)
