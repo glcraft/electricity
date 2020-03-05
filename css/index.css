@@ -112,11 +112,13 @@ body
 }
 #container
 {
+    height: 100%;
     display: flex;
     overflow-y: auto;
 }
 #sass-explorer
 {
+    height: 100%;
     flex: 1;
     overflow-y: auto;
 }
@@ -132,14 +134,19 @@ body
 {
     display: list-item;
 }
-.explorer table
+.explorer-list table
 {
-    border-spacing: 0px;
+    border-collapse: collapse;
 }
 .explorer-list-item > td
 {
-    color: gray;
     padding: 0em 0.5em;
+}
+.explorer-list table td,
+.explorer-list table th
+{
+    border: solid lightgray;
+    border-width: 0px 1px;
 }
 .explorer-list-item *
 {
