@@ -195,11 +195,12 @@ body
 {
     display: inline-table;
     margin: auto;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
     padding-left: 0.2em;
     padding-right: 0.2em;
     user-select: none; 
     cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0); 
 }
 .bc-item:hover
 {
