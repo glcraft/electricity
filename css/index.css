@@ -117,6 +117,19 @@ body
     display: flex;
     overflow-y: auto;
 }
+#bookmark
+{
+    border-right: 1px solid var(--col-separator); 
+}
+#bookmark .bm-arrow
+{
+    transform: rotate(0deg);
+    transition: transform ease 0.3s;
+}
+#bookmark .bm-arrow.bm-opened
+{
+    transform: rotate(90deg);
+}
 #sass-explorer
 {
     height: 100%;
