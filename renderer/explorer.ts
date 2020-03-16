@@ -400,6 +400,7 @@ export function addWindow(paths: string | string[])
         x: currentBound.x+32, 
         y: currentBound.y+32, 
         show: true,
+        frame: false,
         webPreferences: {
             nodeIntegration: true
         }
