@@ -1,6 +1,9 @@
 import {IconStorage, iconManager} from './icons'
 import * as utils from './utils'
 import * as vsicons from 'vscode-icons-js';
+import * as fs from 'fs';
+import * as pug from 'pug';
+import * as path from 'path';
 import { FileInfo } from './explorer';
 import { extractIcon } from 'internal_module'
 class ExecutableIcons implements IconStorage
@@ -65,3 +68,26 @@ currentWin.on("unmaximize", e=>{
     elCapMaxImg.src = utils.getResourceURL("caption/Maximize.svg");
 })
 const firstPath = process.cwd()
+
+const pugBMItem = pug.compileFile(path.join(utils.renderer_path.views, "bookmark", "item.pug"));
+function make_bookmark(dirpath: string)
+{
+    let dirname = utils.getFolderName(dirpath);
+    const test = {fileinfo:{name: dirname, icon: ""}, arrow_img: utils.getResourceURL("breadcrumb_sep.png")}
+    let htmlBM = pugBMItem(test)
+    let elBM = utils.stringToDom(htmlBM)
+    const elIcon = (elBM as HTMLElement).querySelector<HTMLImageElement>(".icon")
+    iconManager.getIcon({
+        icon: "",
+        path: dirpath,
+        type: "dir",
+        name: dirname,
+        stat: new fs.Stats
+    }, 24).then(v=>{
+        elIcon.src = v;
+    })
+    document.querySelector("#bookmark").append(elBM)
+}
+make_bookmark("C:/Users")
+make_bookmark("D:/")
+make_bookmark(process.cwd())

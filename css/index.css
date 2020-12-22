@@ -1,6 +1,7 @@
 :root {
     --col-background: white;
     --col-written: black;
+    --col-separator: lightgray;
     --col-background-tab: rgb(245, 245, 245);
     --col-hovered: rgb(219, 234, 255);
     --col-border-hovered: rgb(146, 176, 218);
@@ -116,6 +117,19 @@ body
     display: flex;
     overflow-y: auto;
 }
+#bookmark
+{
+    border-right: 1px solid var(--col-separator); 
+}
+#bookmark .bm-arrow
+{
+    transform: rotate(0deg);
+    transition: transform ease 0.3s;
+}
+#bookmark .bm-arrow.bm-opened
+{
+    transform: rotate(90deg);
+}
 #sass-explorer
 {
     height: 100%;
@@ -142,10 +156,10 @@ body
 {
     padding: 0em 0.5em;
 }
-.explorer-list table td,
+
 .explorer-list table th
 {
-    border: solid lightgray;
+    border: solid var(--col-separator);
     border-width: 0px 1px;
 }
 .explorer-list-item *
@@ -194,11 +208,12 @@ body
 {
     display: inline-table;
     margin: auto;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
     padding-left: 0.2em;
     padding-right: 0.2em;
     user-select: none; 
     cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0); 
 }
 .bc-item:hover
 {
