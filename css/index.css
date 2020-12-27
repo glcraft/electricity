@@ -34,6 +34,7 @@ body
 .caption-button
 {
     height: 100%;
+    width: 100%;
     padding: 0px 10px;
     transition: background-color ease 0.2s;
     display: inline-block;
@@ -61,14 +62,14 @@ body
     background-color: var(--col-background);
     width: 100%;
     display: flex;
-    -webkit-app-region: drag;
+    
 }
 .tab
 {
     user-select: none;
     margin: 0px;
     min-width: 50px;
-    width: 200px;
+    width: 100%;
     text-align: center;
 
     border-top: 3px solid rgba(0, 0, 0, 0.5);
