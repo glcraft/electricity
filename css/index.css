@@ -57,19 +57,23 @@ body
 {
     filter: brightness(100%);
 }
+#hole-bar {
+    flex-grow: 1;
+    min-width: 50px;
+    -webkit-app-region: drag;
+}
 #tab-bar 
 {
     background-color: var(--col-background);
-    width: 100%;
     display: flex;
-    
+    overflow: auto;
 }
 .tab
 {
     user-select: none;
     margin: 0px;
     min-width: 50px;
-    width: 100%;
+    width: 200px;
     text-align: center;
 
     border-top: 3px solid rgba(0, 0, 0, 0.5);

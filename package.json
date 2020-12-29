@@ -11,7 +11,7 @@
     "watch": "npm-run-all --parallel watch-app watch-renderer",
     "rebuild": "electron-rebuild -f -w internal_module",
     "pack": "npx electron-builder --dir",
-    "postinstall": "npm run rebuild && npm run electron-builder install-app-deps"
+    "postinstall": "npm run rebuild"
   },
   "keywords": [
     "explorer"
@@ -19,7 +19,7 @@
   "author": "GLCraft",
   "license": "ISC",
   "dependencies": {
-    "@types/node": "^13.7.1",
+    "@types/node": "^13.13.38",
     "@types/pug": "^2.0.4",
     "bindings": "^1.5.0",
     "internal_module": "file:./my-modules/internal_module",
@@ -29,13 +29,13 @@
     "vscode-icons-js": "^9.3.0"
   },
   "devDependencies": {
-    "electron": "^8.0.3",
-    "electron-builder": "^22.3.6",
-    "electron-rebuild": "^1.10.0",
-    "nan": "^2.14.0",
-    "node-abi": "^2.14.0",
+    "electron": "^11.1.1",
+    "electron-builder": "^22.9.1",
+    "electron-rebuild": "^1.11.0",
+    "nan": "^2.14.2",
+    "node-abi": "^2.19.3",
     "npm-run-all": "^4.1.5",
-    "typescript": "^3.7.5"
+    "typescript": "^3.9.7"
   },
   "subPackages": [],
   "build": {

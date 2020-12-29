@@ -21,6 +21,7 @@ function initVars()
         mainWindow.show()
     })
 }
+app.allowRendererProcessReuse = true;
 app.on('ready', async () => {
     initVars();
     let pathToIndex = path.join(appPaths.views,`index.html`);
