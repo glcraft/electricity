@@ -75,23 +75,24 @@ inline std::wstring utf8ToWstr(const std::string& str)
     return utf8ToWstr(str.data(), str.length());
 }
 
-void getIcon(const Nan::FunctionCallbackInfo<v8::Value> &args)
+// void getIcon(const Nan::FunctionCallbackInfo<v8::Value> &info)
+NAN_METHOD(getIcon)
 {
-    v8::Isolate* isolate = args.GetIsolate();
-    v8::String::Utf8Value str(isolate, args[0]);
+    v8::Isolate* isolate = info.GetIsolate();
+    v8::String::Utf8Value str(isolate, info[0]);
     std::wstring ws=utf8ToWstr(str);
 
-    SHFILEINFOW info;
-    SHGetFileInfoW(ws.c_str(), FILE_ATTRIBUTE_NORMAL, &info, sizeof(info),
+    SHFILEINFOW shFInfo;
+    SHGetFileInfoW(ws.c_str(), FILE_ATTRIBUTE_NORMAL, &shFInfo, sizeof(shFInfo),
         SHGFI_ICON | SHGFI_USEFILEATTRIBUTES | SHGFI_LARGEICON);
     ICONINFO stIconInfo;
-    GetIconInfo(info.hIcon, &stIconInfo);
+    GetIconInfo(shFInfo.hIcon, &stIconInfo);
     HBITMAP hBmp = stIconInfo.hbmColor;
     BITMAP bitmap;
     GetObject(hBmp, sizeof(bitmap), (LPVOID)&bitmap);
     std::vector<uint8_t> bmpBytes(bitmap.bmHeight * bitmap.bmWidthBytes);
     GetBitmapBits(hBmp, bmpBytes.size(), bmpBytes.data());
-    DestroyIcon(info.hIcon);
+    DestroyIcon(shFInfo.hIcon);
 
 
     std::vector<uint8_t> bmpRealBytes(bitmap.bmWidth * bitmap.bmHeight * 4);
@@ -109,13 +110,14 @@ void getIcon(const Nan::FunctionCallbackInfo<v8::Value> &args)
     std::vector<uint8_t> pngBytes;
     lodepng::encode(pngBytes, bmpRealBytes, bitmap.bmWidth, bitmap.bmHeight);
 
-    args.GetReturnValue().Set(Nan::New(base64_encode(pngBytes.data(), pngBytes.size())).ToLocalChecked());
+    info.GetReturnValue().Set(Nan::New(base64_encode(pngBytes.data(), pngBytes.size())).ToLocalChecked());
 }
-void openWith(const Nan::FunctionCallbackInfo<v8::Value> &args)
+// void openWith(const Nan::FunctionCallbackInfo<v8::Value> &info)
+NAN_METHOD(openWith)
 {
     //http://www.cplusplus.com/forum/windows/57419/
-    v8::Isolate* isolate = args.GetIsolate();
-    v8::String::Utf8Value str(isolate, args[0]);
+    v8::Isolate* isolate = info.GetIsolate();
+    v8::String::Utf8Value str(isolate, info[0]);
     std::wstring pathToFileW=utf8ToWstr(str);
 
     OPENASINFO Info = { 0 };
@@ -128,30 +130,31 @@ void openWith(const Nan::FunctionCallbackInfo<v8::Value> &args)
 //SHOW PROPERTIES WINDOW
 //https://stackoverflow.com/a/33472984/6345054
 
-void showProperties(const Nan::FunctionCallbackInfo<v8::Value> &args)
+// void showProperties(const Nan::FunctionCallbackInfo<v8::Value> &info)
+NAN_METHOD(showProperties)
 {
-    v8::Isolate* isolate = args.GetIsolate();
-    v8::String::Utf8Value str(isolate, args[0]);
+    v8::Isolate* isolate = info.GetIsolate();
+    v8::String::Utf8Value str(isolate, info[0]);
     std::wstring pathToFileW=utf8ToWstr(str);
 
-    SHELLEXECUTEINFOW info = {0};
+    SHELLEXECUTEINFOW shellInfo = {0};
 
-    info.cbSize = sizeof(info);
-    info.lpFile = pathToFileW.c_str();
-    info.nShow = SW_SHOW;
-    info.fMask = SEE_MASK_INVOKEIDLIST;
-    info.lpVerb = L"properties";
+    shellInfo.cbSize = sizeof(shellInfo);
+    shellInfo.lpFile = pathToFileW.c_str();
+    shellInfo.nShow = SW_SHOW;
+    shellInfo.fMask = SEE_MASK_INVOKEIDLIST;
+    shellInfo.lpVerb = L"properties";
 
-    ShellExecuteExW(&info);
+    ShellExecuteExW(&shellInfo);
 }
 
-void fileOperation(const Nan::FunctionCallbackInfo<v8::Value> &args)
+void fileOperation(const Nan::FunctionCallbackInfo<v8::Value> &info)
 {
     // using namespace v8;
-    // Isolate* isolate = args.GetIsolate();
-    // String::Utf8Value type(isolate, args[0]);
+    // Isolate* isolate = info.GetIsolate();
+    // String::Utf8Value type(isolate, info[0]);
     // Local<Context> context = isolate->GetCurrentContext();
-    // Local<Object> obj = args[1]->ToObject(context).ToLocalChecked();
+    // Local<Object> obj = info[1]->ToObject(context).ToLocalChecked();
     
     // SHFILEOPSTRUCTW fileOp = {0};
     // if (type=="copy")
@@ -168,29 +171,15 @@ void fileOperation(const Nan::FunctionCallbackInfo<v8::Value> &args)
     
     // std::wstring pathToFileW=utf8ToWstr(str);
 }
-void Init(v8::Local<v8::Object> exports)
-{
-    v8::Local<v8::Context> context = exports->CreationContext();
-    exports->Set(context,
-                 Nan::New("extractIcon").ToLocalChecked(),
-                 Nan::New<v8::FunctionTemplate>(getIcon)
-                     ->GetFunction(context)
-                     .ToLocalChecked());
-    exports->Set(context,
-                 Nan::New("openWith").ToLocalChecked(),
-                 Nan::New<v8::FunctionTemplate>(openWith)
-                     ->GetFunction(context)
-                     .ToLocalChecked());
-    exports->Set(context,
-                 Nan::New("showProperties").ToLocalChecked(),
-                 Nan::New<v8::FunctionTemplate>(showProperties)
-                     ->GetFunction(context)
-                     .ToLocalChecked());
-    exports->Set(context,
-                 Nan::New("fileOperation").ToLocalChecked(),
-                 Nan::New<v8::FunctionTemplate>(fileOperation)
-                     ->GetFunction(context)
-                     .ToLocalChecked());
+NAN_MODULE_INIT(Init) {
+    Nan::SetMethod(target, "extractIcon", getIcon);
+    Nan::SetMethod(target, "openWith", openWith);
+    Nan::SetMethod(target, "showProperties", showProperties);
+    Nan::SetMethod(target, "fileOperation", fileOperation);
 }
 
+#if NODE_MAJOR_VERSION >= 10
+NAN_MODULE_WORKER_ENABLED(internal_module, Init)
+#else
 NODE_MODULE(internal_module, Init)
+#endif
