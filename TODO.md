@@ -49,6 +49,7 @@
   * [ ] Changer le style
 * [x] Onglets
   * [x] Bouton fermer
+  * [ ] Déplacer l'onglet
   * [x] Menus
     * [x] Fermer
     * [x] Dupliquer
